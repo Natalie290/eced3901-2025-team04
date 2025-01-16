@@ -161,7 +161,7 @@ class NavigateSquare(Node):
 
         # WARNING: Check for updates, note this is set and will run backwards
         #          on the physical model but correctly in simulation.
-        self.x_vel = 0.2
+        self.x_vel = -0.2
 
         self.x_now = 0.0
         self.x_init = 0.0
