@@ -240,7 +240,7 @@ class NavigateSquare(Node):
     min_index = laser_ranges.index(laser_ranges_min) if laser_ranges_min is not None else None
 
     # Define distance threshold
-    obstacle_distance = 0.5  # Threshold distance in meters
+    obstacle_distance = 0.05  # Threshold distance in meters
 
     if laser_ranges_min is not None and laser_ranges_min < obstacle_distance:
         # Obstacle detected: Turn left or right based on the obstacle position
