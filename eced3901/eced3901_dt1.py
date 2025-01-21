@@ -223,31 +223,48 @@ class NavigateSquare(Node):
         self.get_logger().info("Sent: " + str(msg))    
 
     def control_example_lidar(self):
-        """ Control example using LIDAR"""
-        msg = Twist()
-        # This has two fields:
-        # msg.linear.x
-        # msg.angular.z		        	
+    """Control logic to move the robot around a box using LiDAR."""
+    msg = Twist()
 
-        laser_ranges = self.ldi.get_range_array(0.0)
-        if laser_ranges is None:
-            self.get_logger().warning("Invalid range data, skipping, see if solves itself...")
-            return
-
-        # This gets the minimum range, but ignores NONE values. The LIDAR data isn't always
-        # reliable, so we might want to ignore NONEs. We also might want to select the minimum
-        # range from our entire sweep.
-        laser_ranges_min = min_ignore_None(laser_ranges)
-
-        # If ALL the lidar returns are NONE, it means all returns were invalid (probably too close).
-        # So only do something if the 
-        if laser_ranges_min and laser_ranges_min > 0.5:
-            msg.linear.x = self.x_vel
-        elif laser_ranges_min and laser_ranges_min < 0.5:
-            msg.angular.z = 1.0
-
+    # Get LiDAR data for a ±90° range
+    laser_ranges = self.ldi.get_range_array(0.0, left_offset_deg=-90, right_offset_deg=90, invalid_data=None)
+    if laser_ranges is None:
+        self.get_logger().warning("No valid range data available. Stopping.")
+        msg.linear.x = 0.0
+        msg.angular.z = 0.0
         self.pub_vel.publish(msg)
-        self.get_logger().info("Sent: " + str(msg))      
+        return
+
+    # Find the minimum distance in the LiDAR sweep
+    laser_ranges_min = min_ignore_None(laser_ranges)
+    min_index = laser_ranges.index(laser_ranges_min) if laser_ranges_min is not None else None
+
+    # Define distance threshold
+    obstacle_distance = 0.5  # Threshold distance in meters
+
+    if laser_ranges_min is not None and laser_ranges_min < obstacle_distance:
+        # Obstacle detected: Turn left or right based on the obstacle position
+        if min_index < len(laser_ranges) / 2:
+            msg.angular.z = 0.5  # Turn left to avoid obstacle
+        else:
+            msg.angular.z = -0.5  # Turn right to avoid obstacle
+        msg.linear.x = 0.0  # Stop moving forward
+    else:
+        # No obstacle ahead: Move forward and adjust to follow the box edge
+        msg.linear.x = self.x_vel
+        if min_index is not None:
+            # Adjust direction based on closest point's index
+            if min_index < len(laser_ranges) / 2:
+                msg.angular.z = -0.1  # Turn slightly right to follow the edge
+            else:
+                msg.angular.z = 0.1  # Turn slightly left to follow the edge
+        else:
+            msg.angular.z = 0.0  # Go straight if no valid data
+
+    # Publish the velocity command
+    self.pub_vel.publish(msg)
+    self.get_logger().info(f"Sent: {msg}")
+  
 
     def timer_callback(self):
         """Timer callback for 10Hz control loop"""
