@@ -223,47 +223,42 @@ class NavigateSquare(Node):
         self.get_logger().info("Sent: " + str(msg))    
 
     def control_example_lidar(self):
-    """Control logic to move the robot around a box using LiDAR."""
+    """Control the robot using LIDAR data to navigate in a square."""
     msg = Twist()
 
-    # Get LiDAR data for a ±90° range
-    laser_ranges = self.ldi.get_range_array(0.0, left_offset_deg=-90, right_offset_deg=90, invalid_data=None)
+    # Fetch LIDAR data: range in front of the robot
+    laser_ranges = self.ldi.get_range_array(0.0, left_offset_deg=-10, right_offset_deg=10)
     if laser_ranges is None:
-        self.get_logger().warning("No valid range data available. Stopping.")
-        msg.linear.x = 0.0
-        msg.angular.z = 0.0
-        self.pub_vel.publish(msg)
+        self.get_logger().warning("Invalid range data, skipping control loop...")
         return
 
-    # Find the minimum distance in the LiDAR sweep
+    # Minimum distance to obstacle in the forward direction
     laser_ranges_min = min_ignore_None(laser_ranges)
-    min_index = laser_ranges.index(laser_ranges_min) if laser_ranges_min is not None else None
 
-    # Define distance threshold
-    obstacle_distance = 0.05  # Threshold distance in meters
-
-    if laser_ranges_min is not None and laser_ranges_min < obstacle_distance:
-        # Obstacle detected: Turn left or right based on the obstacle position
-        if min_index < len(laser_ranges) / 2:
-            msg.angular.z = 0.5  # Turn left to avoid obstacle
+    # Square navigation states: forward motion and turning
+    if self.state == "forward":
+        if laser_ranges_min and laser_ranges_min > 0.5:
+            # Continue moving forward
+            msg.linear.x = self.x_vel
+            msg.angular.z = 0.0
         else:
-            msg.angular.z = -0.5  # Turn right to avoid obstacle
-        msg.linear.x = 0.0  # Stop moving forward
-    else:
-        # No obstacle ahead: Move forward and adjust to follow the box edge
-        msg.linear.x = self.x_vel
-        if min_index is not None:
-            # Adjust direction based on closest point's index
-            if min_index < len(laser_ranges) / 2:
-                msg.angular.z = -0.1  # Turn slightly right to follow the edge
-            else:
-                msg.angular.z = 0.1  # Turn slightly left to follow the edge
+            # Obstacle detected, start turning
+            self.state = "turn"
+            self.turn_start_time = self.get_clock().now()
+    elif self.state == "turn":
+        # Turn in place for a set duration (adjust to complete a ~90° turn)
+        if (self.get_clock().now() - self.turn_start_time).nanoseconds / 1e9 < 2.0:
+            msg.linear.x = 0.0
+            msg.angular.z = 1.0
         else:
-            msg.angular.z = 0.0  # Go straight if no valid data
+            # Finished turning, switch back to forward motion
+            self.state = "forward"
+            self.x_init = self.x_now
+            self.y_init = self.y_now
 
     # Publish the velocity command
     self.pub_vel.publish(msg)
-    self.get_logger().info(f"Sent: {msg}")
+    self.get_logger().info("Sent: " + str(msg))
   
 
     def timer_callback(self):
