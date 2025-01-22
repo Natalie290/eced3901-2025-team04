@@ -227,7 +227,7 @@ class NavigateSquare(Node):
     msg = Twist()
 
     # Fetch LIDAR data: range in front of the robot
-    laser_ranges = self.ldi.get_range_array(0.0, left_offset_deg=-10, right_offset_deg=10)
+    laser_ranges = self.ldi.get_range_array(90.0, left_offset_deg=-1, right_offset_deg=1)
     if laser_ranges is None:
         self.get_logger().warning("Invalid range data, skipping control loop...")
         return
@@ -236,7 +236,7 @@ class NavigateSquare(Node):
     laser_ranges_min = min_ignore_None(laser_ranges)
 
     # Square navigation states: forward motion and turning
-    if self.state == "forward":
+    if self.state == "before_box":
         if laser_ranges_min and laser_ranges_min > 0.5:
             # Continue moving forward
             msg.linear.x = self.x_vel
@@ -245,7 +245,7 @@ class NavigateSquare(Node):
             # Obstacle detected, start turning
             self.state = "turn"
             self.turn_start_time = self.get_clock().now()
-    elif self.state == "turn":
+    elif self.state == "along_edge":
         # Turn in place for a set duration (adjust to complete a ~90° turn)
         if (self.get_clock().now() - self.turn_start_time).nanoseconds / 1e9 < 2.0:
             msg.linear.x = 0.0
@@ -255,6 +255,8 @@ class NavigateSquare(Node):
             self.state = "forward"
             self.x_init = self.x_now
             self.y_init = self.y_now
+    elif self.state == "corner":
+	    
 
     # Publish the velocity command
     self.pub_vel.publish(msg)
