@@ -164,6 +164,8 @@ class NavigateSquare(Node):
         self.x_vel = -0.2 # forward speed
 	self.turn_speed = 1.0 # angular speed for turns
 	self.loops = 0
+	self.state = "before_loop"
+	self.turn_start_time = None
 
         self.x_now = 0.0
         self.x_init = 0.0
@@ -173,8 +175,6 @@ class NavigateSquare(Node):
         self.d_aim = 1.0
 
         self.laser_range = None
-	self.before_box = 0.0
-
 
         # Subscribe to odometry
         self.sub_odom = self.create_subscription(
@@ -252,7 +252,7 @@ class NavigateSquare(Node):
         # move along egde of box till at corner
         if laser_ranges_min and laser_ranges_min > 0.05:
             msg.linear.x = self.x_vel
-            msg.angular.z = 0.0
+            msg.angular.z = 0.1
         else:
             # Finished turning, switch back to forward motion
             self.state = "corner"
@@ -265,7 +265,6 @@ class NavigateSquare(Node):
         else:
             # Obstacle detected, start turning
             self.loops += 1
-	
 	    if self.loops >= 4:
 		msg.linear.x = 0.0
 		msg.angular.z = 0.0
@@ -286,8 +285,8 @@ class NavigateSquare(Node):
 
         #self.get_logger().info(f'Timer hit')
 
-        self.control_example_odom()
-        #self.control_example_lidar()  
+        #self.control_example_odom()
+        self.control_example_lidar()  
 
     def odom_callback(self, msg):
         """Callback on 'odom' subscription"""
