@@ -286,8 +286,8 @@ class NavigateSquare(Node):
 
         #self.get_logger().info(f'Timer hit')
 
-        #self.control_example_odom()
-        self.control_example_lidar()  
+        self.control_example_odom()
+        #self.control_example_lidar()  
 
     def odom_callback(self, msg):
         """Callback on 'odom' subscription"""
