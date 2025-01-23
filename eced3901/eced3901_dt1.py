@@ -228,52 +228,52 @@ class NavigateSquare(Node):
 
     def control_example_lidar(self):
     """Control the robot using LIDAR data to navigate in a square."""
-    msg = Twist()
+    	msg = Twist()
 
     # Fetch LIDAR data: range in front of the robot
-    laser_ranges = self.ldi.get_range_array(90.0, left_offset_deg=-1, right_offset_deg=1)
-    if laser_ranges is None:
-        self.get_logger().warning("Invalid range data, skipping control loop...")
-        return
+    	laser_ranges = self.ldi.get_range_array(90.0, left_offset_deg=-1, right_offset_deg=1)
+    	if laser_ranges is None:
+        	self.get_logger().warning("Invalid range data, skipping control loop...")
+        	return
 
     # Minimum distance to obstacle in the forward direction
-    laser_ranges_min = min_ignore_None(laser_ranges)
+    	laser_ranges_min = min_ignore_None(laser_ranges)
 
     # Square navigation states: forward motion and turning
-    if self.state == "before_box":
-        if laser_ranges_min and laser_ranges_min > 0.3:
-            # Continue moving forward till box detected
-            msg.linear.x = self.x_vel
-            msg.angular.z = 0.0
-        else:
-            # Obstacle detected, start turning
-            self.state = "along_box"
-    elif self.state == "along_box":
-        # move along egde of box till at corner
-        if laser_ranges_min and laser_ranges_min > 0.05:
-            msg.linear.x = self.x_vel
-            msg.angular.z = 0.1
-        else:
-            # Finished turning, switch back to forward motion
-            self.state = "corner"
-            self.turn_start_time = self.get_clock().now()
-    elif self.state == "corner":
-	if (self.get_clock().now() - self.turn_start_time).nanoseconds / 1e9 < 2.0:
-            # turn 90 left
-            msg.linear.x = 0.0
-            msg.angular.z = self.turn_speed
-        else:
-            # Obstacle detected, start turning
-            self.loops += 1
-	    if self.loops >= 4:
-		msg.linear.x = 0.0
-		msg.angular.z = 0.0
-		self.state = "stopped"
-	    else:
-		self.state = "before_box"
-    elif self.state == "stopped":
-	    msg.linear.x = 0.0
-	    msg.angular.z = 0.0
+	    if self.state == "before_box":
+	        if laser_ranges_min and laser_ranges_min > 0.3:
+	            # Continue moving forward till box detected
+	            msg.linear.x = self.x_vel
+	            msg.angular.z = 0.0
+	        else:
+	            # Obstacle detected, start turning
+	            self.state = "along_box"
+	    elif self.state == "along_box":
+	        # move along egde of box till at corner
+	        if laser_ranges_min and laser_ranges_min > 0.05:
+	            msg.linear.x = self.x_vel
+	            msg.angular.z = 0.1
+	        else:
+	            # Finished turning, switch back to forward motion
+	            self.state = "corner"
+	            self.turn_start_time = self.get_clock().now()
+	    elif self.state == "corner":
+		if (self.get_clock().now() - self.turn_start_time).nanoseconds / 1e9 < 2.0:
+	            # turn 90 left
+	            msg.linear.x = 0.0
+	            msg.angular.z = self.turn_speed
+	        else:
+	            # Obstacle detected, start turning
+	            self.loops += 1
+		    if self.loops >= 4:
+			msg.linear.x = 0.0
+			msg.angular.z = 0.0
+			self.state = "stopped"
+		    else:
+			self.state = "before_box"
+	    elif self.state == "stopped":
+		    msg.linear.x = 0.0
+		    msg.angular.z = 0.0
 				
     # Publish the velocity command
     self.pub_vel.publish(msg)
