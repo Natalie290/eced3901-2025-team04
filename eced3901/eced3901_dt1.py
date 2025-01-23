@@ -240,8 +240,8 @@ class NavigateSquare(Node):
     	laser_ranges_min = min_ignore_None(laser_ranges)
 
     # Square navigation states: forward motion and turning
-	    if self.state == "before_box":
-	        if laser_ranges_min and laser_ranges_min > 0.3:
+	if self.state == "before_box":
+		if laser_ranges_min and laser_ranges_min > 0.3:
 	            # Continue moving forward till box detected
 	            msg.linear.x = self.x_vel
 	            msg.angular.z = 0.0
