@@ -179,23 +179,64 @@ class NavigateSquare(Node):
         self.get_logger().info(f"Sent: {str(msg)}")
 
     def control_example_lidar(self):
-        """Control example using LIDAR"""
+        print("Hello")
+        """ Control example using LIDAR"""
         msg = Twist()
 
-        laser_ranges = self.ldi.get_range_array(0.0)
+        # Fetch LIDAR data: range in front of the robot
+        laser_ranges = self.ldi.get_range_array(90.0, left_offset_deg=-1, right_offset_deg=1)
         if laser_ranges is None:
-            self.get_logger().warning("Invalid range data, skipping...")
+            self.get_logger().warning("Invalid range data, skipping control loop...")
             return
 
-        laser_ranges_min = min_ignore_none(laser_ranges)
+        # Minimum distance to obstacle in the forward direction
+        laser_ranges_min = min_ignore_None(laser_ranges)
 
-        if laser_ranges_min and laser_ranges_min > 0.5:
-            msg.linear.x = self.x_vel
-        elif laser_ranges_min and laser_ranges_min < 0.5:
-            msg.angular.z = 1.0
+        # State machine logic for navigating around the box
+        if self.state == "before_box":
+            if laser_ranges_min and laser_ranges_min > 0.5:
+                # Continue moving forward
+                msg.linear.x = self.x_vel
+                msg.angular.z = 0.0
+            else:
+                # Edge of box detected
+                self.state = "along_box"
 
+        elif self.state == "along_box":
+            if laser_ranges_min and laser_ranges_min > 0.3:
+                # Maintain close distance while moving along the box edge
+                msg.linear.x = self.x_vel
+                msg.angular.z = 0.1  # Slight adjustment to follow the edge
+            else:
+                # Detected corner or obstacle, prepare to turn
+                self.state = "corner"
+                self.turn_start_time = self.get_clock().now()
+
+        elif self.state == "corner":
+            if (self.get_clock().now() - self.turn_start_time).nanoseconds / 1e9 < self.turn_duration:
+                # Perform the 90° turn
+                msg.linear.x = 0.0
+                msg.angular.z = self.turn_vel
+            else:
+                # Completed the turn
+                self.loops += 1
+                if self.loops >= 4:
+                    # Stop after completing the desired number of loops
+                    msg.linear.x = 0.0
+                    msg.angular.z = 0.0
+                    self.state = "stopped"
+                else:
+                    self.state = "before_box"
+
+        elif self.state == "stopped":
+            # Robot is stopped
+            msg.linear.x = 0.0
+            msg.angular.z = 0.0
+
+        # Publish the velocity command
         self.pub_vel.publish(msg)
-        self.get_logger().info(f"Sent: {str(msg)}")
+        self.get_logger().info("Sent: " + str(msg))
+
 
     def timer_callback(self):
         """Timer callback for 10Hz control loop"""
