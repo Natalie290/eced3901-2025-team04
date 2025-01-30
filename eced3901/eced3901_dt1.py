@@ -224,7 +224,7 @@ class NavigateSquare(Node):
 
         # State: Turning
         if self.turning:
-            target_yaw = (self.prev_yaw + 90) % 360  # Previous yaw + 90 degrees
+            target_yaw = (self.prev_yaw + 80) % 360  # Previous yaw + 90 degrees
             angle_diff = (target_yaw - self.yaw + 180) % 360 - 180  # Ensure shortest turn direction
 
             self.get_logger().info(f"Turning... Yaw: {self.yaw}, Target: {target_yaw}, Diff: {angle_diff}")
@@ -258,46 +258,6 @@ class NavigateSquare(Node):
 
         self.pub_vel.publish(msg)
         # Move in a straight line along one edge
-        """if self.current_edge <= 4:
-            # Calculate the distance traveled from the initial position
-            self.distance_travelled = math.sqrt((self.x_now - self.x_init) ** 2 + (self.y_now - self.y_init) ** 2)
-            
-            if self.distance_travelled < self.side_length:
-                # Move straight along the current edge
-                msg.linear.x = self.x_vel  # Move forward
-                msg.angular.z = 0.0       # No rotation while moving straight
-            else: 
-                # Once the robot has traveled the distance, prepare to turn
-                self.turning = True
-                self.target_yaw = (self.yaw + 90) % 360
-                msg.linear.x = 0.0         # Stop moving forward to turn
-                msg.angular.z = 0.0       # Stop any ongoing turns (if any)
-        
-        # Once the robot finishes moving straight and is ready to turn
-        if self.turning:
-            # We need to turn 90 degrees, check yaw for a 90-degree turn
-            target_yaw = (self.yaw + 90) % 360
-            angle_diff = (target_yaw - self.yaw + 180) % 360 - 180  # Ensures shortest path
-            self.get_logger().info(f"Turning... Yaw: {self.yaw}, Target: {target_yaw}, Diff: {angle_diff}")
-            if abs(angle_diff) < 2:
-                self.turning = False  # Stop turning
-                self.x_init = self.x_now  # Update initial position for the next side
-                self.y_init = self.y_now
-                self.current_edge += 1  # Move to the next edge
-                self.get_logger().info(f"Turn complete. Moving to edge {self.current_edge}")
-            else:
-                # Stop turning
-                msg.angular.z = 0.5 if angle_diff > 0 else -0.5  # Rotate in correct direction
-
-        # If all four edges are completed, stop the robot
-        if self.current_edge > 4:
-            msg.linear.x = 0.0
-            msg.angular.z = 0.0
-
-        # Publish the velocity command
-        self.pub_vel.publish(msg)
-        self.get_logger().info(f"Sent: {msg}")"""
-    
 
     def control_example_lidar(self):
         print("Hello")
