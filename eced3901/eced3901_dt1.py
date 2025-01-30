@@ -1,5 +1,4 @@
-# Copyright 2016 Open Source Robotics Foundation, Inc.
-#
+    # Copyright 2016 Open Source Robotics Foundation, Inc.
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
 # You may obtain a copy of the License at
@@ -164,10 +163,13 @@ class NavigateSquare(Node):
 
         # WARNING: Check for updates, note this is set and will run backwards
         #          on the physical model but correctly in simulation.
+        self.state = "before box"
         self.x_vel = 0.2
         self.turn_vel = 0.7  # Angular velocity (rad/s)
-        self.side_length = 1.0  # Length of each side of the box (meters)
-        
+        self.short_edge_length = 0.97  # Length of each side of the box (meters)
+        self.first_edge_length = 1.2
+        self.side_length = self.first_edge_length
+
         self.current_edge = 1  # Track which edge we're on (1-4 for each side of the box)
         self.angle_to_turn = 90  # Turn 90 degrees after each side
         self.distance_travelled = 0.0 #disatance traveled
@@ -222,42 +224,51 @@ class NavigateSquare(Node):
         # Calculate distance traveled
         self.distance_travelled = math.sqrt((self.x_now - self.x_init)**2 + (self.y_now - self.y_init)**2)
 
-        # State: Turning
-        if self.turning:
-            target_yaw = (self.prev_yaw + 80) % 360  # Previous yaw + 90 degrees
-            angle_diff = (target_yaw - self.yaw + 180) % 360 - 180  # Ensure shortest turn direction
+        if self.current_edge == 1:
+            self.side_length = self.first_edge_length
+        else:
+            self.side_length = self.short_edge_length
+
+        # Calculate distance traveled
+        self.distance_travelled = math.sqrt((self.x_now - self.x_init)**2 + (self.y_now - self.y_init)**2)
+
+        if self.current_edge == 1 and self.distance_travelled < self.first_edge_length:
+            self.get_logger().info(f"Moving forward first edge: {self.distance_travelled}/{self.first_edge_length}")
+            msg.linear.x = 0.2  # Move forward
+
+        # Turning logic, as before
+        elif self.turning:
+            target_yaw = (self.prev_yaw + 80) % 360
+            angle_diff = (target_yaw - self.yaw + 180) % 360 - 180
 
             self.get_logger().info(f"Turning... Yaw: {self.yaw}, Target: {target_yaw}, Diff: {angle_diff}")
 
             if abs(angle_diff) < 2:  # Small tolerance to consider turn complete
                 self.turning = False
+                self.side_length =self.side_length-0.1
                 self.current_edge += 1
                 self.x_init = self.x_now  # Reset initial position for next edge
                 self.y_init = self.y_now
                 self.get_logger().info(f"Turn complete. Moving to edge {self.current_edge}")
             else:
-                msg.angular.z = 0.5 if angle_diff > 0 else -0.5  # Rotate in correct direction
+                msg.angular.z = 0.5 if angle_diff > 0 else -0.5
 
-        # State: Moving Forward
-        elif self.distance_travelled < self.side_length:
+        elif self.current_edge > 1 and self.distance_travelled < self.side_length:
             self.get_logger().info(f"Moving forward. Distance: {self.distance_travelled}/{self.side_length}")
             msg.linear.x = 0.2  # Move forward at constant speed
 
-        # Finished an edge, start turning
         else:
             self.get_logger().info(f"Edge {self.current_edge} complete. Preparing to turn.")
             self.turning = True
             self.prev_yaw = self.yaw  # Store current yaw as reference for next turn
             msg.linear.x = 0.0  # Stop movement before turning
 
-        # Stop condition: If all four edges are completed
         if self.current_edge > 4:
             self.get_logger().info("Square completed. Stopping.")
             msg.linear.x = 0.0
             msg.angular.z = 0.0
 
         self.pub_vel.publish(msg)
-        # Move in a straight line along one edge
 
     def control_example_lidar(self):
         print("Hello")
@@ -265,8 +276,8 @@ class NavigateSquare(Node):
         msg = Twist()
 
         # Fetch LIDAR data: range in front of the robot
-        laser_ranges = self.ldi.get_range_array(90.0, left_offset_deg=-1, right_offset_deg=1)
-        if laser_ranges is None:
+        laser_ranges = self.ldi.get_range_array(0.0, left_offset_deg=-90, right_offset_deg=10)
+        if laser_ranges is None or len(laser_ranges) ==0:
             self.get_logger().warning("Invalid range data, skipping control loop...")
             return
 
