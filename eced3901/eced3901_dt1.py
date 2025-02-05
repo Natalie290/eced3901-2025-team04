@@ -246,13 +246,13 @@ class NavigateSquare(Node):
 
             if abs(angle_diff) < 2:  # Small tolerance to consider turn complete
                 self.turning = False
-                self.side_length =self.side_length-0.08
-                self.current_edge += 1
+                self.side_length =self.side_length-0.08 # decrease distanve to travle to get closer to box
+                self.current_edge += 1 # increment side count
                 self.x_init = self.x_now  # Reset initial position for next edge
                 self.y_init = self.y_now
                 self.get_logger().info(f"Turn complete. Moving to edge {self.current_edge}")
             else:
-                msg.angular.z = 0.5 if angle_diff > 0 else -0.5
+                msg.angular.z = 0.5 if angle_diff > 0 else -0.5 # continue turning
 
         elif self.current_edge > 1 and self.distance_travelled < self.side_length:
             self.get_logger().info(f"Moving forward. Distance: {self.distance_travelled}/{self.side_length}")
@@ -264,7 +264,7 @@ class NavigateSquare(Node):
             self.prev_yaw = self.yaw  # Store current yaw as reference for next turn
             msg.linear.x = 0.0  # Stop movement before turning
 
-        if self.current_edge > 4:
+        if self.current_edge > 4: # loop 4 times for each side of box
             self.get_logger().info("Square completed. Stopping.")
             msg.linear.x = 0.0
             msg.angular.z = 0.0
