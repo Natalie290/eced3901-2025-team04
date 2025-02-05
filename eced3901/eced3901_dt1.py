@@ -167,7 +167,7 @@ class NavigateSquare(Node):
         self.x_vel = 0.2 # x velocity
         self.turn_vel = 0.7  # Angular velocity (rad/s)
         self.short_edge_length = 0.97  # Length of each side of the box (meters)
-        self.first_edge_length = 1.2 # length to travel along edge
+        self.first_edge_length = 1.1 # length to travel along edge
         self.side_length = self.first_edge_length
 
         self.current_edge = 1  # Track which edge we're on (1-4 for each side of the box)
@@ -246,7 +246,7 @@ class NavigateSquare(Node):
 
             if abs(angle_diff) < 2:  # Small tolerance to consider turn complete
                 self.turning = False
-                self.side_length =self.side_length-0.1
+                self.side_length =self.side_length-0.08
                 self.current_edge += 1
                 self.x_init = self.x_now  # Reset initial position for next edge
                 self.y_init = self.y_now
