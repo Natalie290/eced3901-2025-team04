@@ -31,8 +31,8 @@ from collections import deque
 class LaserDataInterface(object):
 
     def __init__(self, storage_depth=4, logger=None):
-        self.laser_data = deque()
-        self.depth = storage_depth
+        self.laser_data = deque() #store lidar data as que
+        self.depth = storage_depth #maximum stored data depth
         self.logger = logger
 
     def get_logger(self):
@@ -65,7 +65,7 @@ class LaserDataInterface(object):
         offset_pos = round(right_offset_deg / angleset_deg)
         offset_neg = round(left_offset_deg / angleset_deg)
 
-        #Get absolute values, which may be negative!
+        #calculate start and end indices
         start = offset_i + offset_neg
         end = offset_i + offset_pos
         
@@ -163,11 +163,11 @@ class NavigateSquare(Node):
 
         # WARNING: Check for updates, note this is set and will run backwards
         #          on the physical model but correctly in simulation.
-        self.state = "before box"
-        self.x_vel = 0.2
+        self.state = "before box" # state for before robots infront of box
+        self.x_vel = 0.2 # x velocity
         self.turn_vel = 0.7  # Angular velocity (rad/s)
         self.short_edge_length = 0.97  # Length of each side of the box (meters)
-        self.first_edge_length = 1.2
+        self.first_edge_length = 1.2 # length to travel along edge
         self.side_length = self.first_edge_length
 
         self.current_edge = 1  # Track which edge we're on (1-4 for each side of the box)
@@ -176,6 +176,7 @@ class NavigateSquare(Node):
         self.turning = False # turn flag
         self.angle_diff = 0.0
 
+        #robot position tracking
         self.x_now = 0.0
         self.x_init = 0.0
         self.y_now = 0.0
