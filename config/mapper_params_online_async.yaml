@@ -1,0 +1,26 @@
+mode: localization
+map_file_name: /tmp/map
+use_sim_time: false
+map_start_pose: [0.0, 0.0, 0.0]
+map_update_interval: 2.0
+
+# Parameters for the solver
+solver_plugin: solver_plugins::CeresSolver
+
+# The maximum number of scans to buffer in the graph
+max_laser_scans_buffered: 100
+
+# The maximum number of constraints to buffer in the graph
+max_constraints_buffered: 100
+
+# The maximum number of iterations to run the optimization
+optimization_iterations: 10
+
+# The maximum distance between consecutive scans to be considered a match
+max_scan_match_distance: 2.0
+
+# The minimum number of scans to buffer before running the optimization
+min_laser_scans_buffered: 10
+
+# The maximum number of constraints to buffer in the graph
+max_constraints_buffered: 100
