@@ -1,0 +1,9 @@
+source;share/amcl_localization/hook/path.ps1
+source;share/amcl_localization/hook/path.dsv
+source;share/amcl_localization/hook/path.sh
+source;share/amcl_localization/hook/pythonpath.ps1
+source;share/amcl_localization/hook/pythonpath.dsv
+source;share/amcl_localization/hook/pythonpath.sh
+source;share/amcl_localization/hook/pythonscriptspath.ps1
+source;share/amcl_localization/hook/pythonscriptspath.dsv
+source;share/amcl_localization/hook/pythonscriptspath.sh

@@ -1,0 +1,31 @@
+[0.684s] Invoking command in '/home/student/ros2_ws/src/amcl_localization': PYTHONPATH=/home/student/ros2_ws/src/build/amcl_localization/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/amcl_localization build --build-base /home/student/ros2_ws/src/build/amcl_localization/build install --record /home/student/ros2_ws/src/build/amcl_localization/install.log --single-version-externally-managed
+[0.908s] running egg_info
+[0.908s] creating ../build/amcl_localization/amcl_localization.egg-info
+[0.909s] writing ../build/amcl_localization/amcl_localization.egg-info/PKG-INFO
+[0.909s] writing dependency_links to ../build/amcl_localization/amcl_localization.egg-info/dependency_links.txt
+[0.909s] writing entry points to ../build/amcl_localization/amcl_localization.egg-info/entry_points.txt
+[0.909s] writing requirements to ../build/amcl_localization/amcl_localization.egg-info/requires.txt
+[0.909s] writing top-level names to ../build/amcl_localization/amcl_localization.egg-info/top_level.txt
+[0.909s] writing manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'
+[0.909s] reading manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'
+[0.911s] writing manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'
+[0.911s] running build
+[0.912s] running build_py
+[0.912s] creating /home/student/ros2_ws/src/build/amcl_localization/build
+[0.912s] creating /home/student/ros2_ws/src/build/amcl_localization/build/lib
+[0.912s] creating /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization
+[0.912s] copying amcl_localization/__init__.py -> /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization
+[0.912s] copying amcl_localization/amcl_node.py -> /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization
+[0.912s] running install
+[0.913s] running install_lib
+[0.913s] creating /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization
+[0.913s] copying /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization/__init__.py -> /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization
+[0.913s] copying /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization/amcl_node.py -> /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization
+[0.914s] byte-compiling /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization/__init__.py to __init__.cpython-310.pyc
+[0.914s] byte-compiling /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization/amcl_node.py to amcl_node.cpython-310.pyc
+[0.915s] running install_egg_info
+[0.917s] Copying ../build/amcl_localization/amcl_localization.egg-info to /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization-0.0.1-py3.10.egg-info
+[0.918s] running install_scripts
+[0.939s] Installing amcl_node script to /home/student/ros2_ws/src/install/amcl_localization/bin
+[0.942s] writing list of installed files to '/home/student/ros2_ws/src/build/amcl_localization/install.log'
+[0.986s] Invoked command in '/home/student/ros2_ws/src/amcl_localization' returned '0': PYTHONPATH=/home/student/ros2_ws/src/build/amcl_localization/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/amcl_localization build --build-base /home/student/ros2_ws/src/build/amcl_localization/build install --record /home/student/ros2_ws/src/build/amcl_localization/install.log --single-version-externally-managed

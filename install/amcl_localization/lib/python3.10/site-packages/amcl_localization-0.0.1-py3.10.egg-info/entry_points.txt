@@ -1,0 +1,3 @@
+[console_scripts]
+amcl_node = amcl_localization.amcl_node:main
+

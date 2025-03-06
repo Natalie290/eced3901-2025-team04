@@ -1,0 +1,25 @@
+[0.908s] Invoking command in '/home/student/ros2_ws/src/eced3901': PYTHONPATH=/home/student/ros2_ws/build/eced3901/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/install/eced3901/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/eced3901 build --build-base /home/student/ros2_ws/build/eced3901/build install --record /home/student/ros2_ws/build/eced3901/install.log --single-version-externally-managed install_data
+[1.098s] running egg_info
+[1.105s] writing ../../build/eced3901/eced3901.egg-info/PKG-INFO
+[1.108s] writing dependency_links to ../../build/eced3901/eced3901.egg-info/dependency_links.txt
+[1.109s] writing entry points to ../../build/eced3901/eced3901.egg-info/entry_points.txt
+[1.118s] writing requirements to ../../build/eced3901/eced3901.egg-info/requires.txt
+[1.118s] writing top-level names to ../../build/eced3901/eced3901.egg-info/top_level.txt
+[1.119s] reading manifest file '../../build/eced3901/eced3901.egg-info/SOURCES.txt'
+[1.122s] writing manifest file '../../build/eced3901/eced3901.egg-info/SOURCES.txt'
+[1.122s] running build
+[1.123s] running build_py
+[1.128s] running install
+[1.128s] running install_lib
+[1.136s] running install_data
+[1.141s] copying launch/lab6nav.launch (copy).py -> /home/student/ros2_ws/install/eced3901/share/eced3901/launch
+[1.142s] copying launch/lab6nav.launch.py -> /home/student/ros2_ws/install/eced3901/share/eced3901/launch
+[1.155s] running install_egg_info
+[1.169s] removing '/home/student/ros2_ws/install/eced3901/lib/python3.10/site-packages/eced3901-0.0.0-py3.10.egg-info' (and everything under it)
+[1.170s] Copying ../../build/eced3901/eced3901.egg-info to /home/student/ros2_ws/install/eced3901/lib/python3.10/site-packages/eced3901-0.0.0-py3.10.egg-info
+[1.170s] running install_scripts
+[1.193s] Installing dt1 script to /home/student/ros2_ws/install/eced3901/lib/eced3901
+[1.199s] Installing serialsensor script to /home/student/ros2_ws/install/eced3901/lib/eced3901
+[1.205s] Installing talker script to /home/student/ros2_ws/install/eced3901/lib/eced3901
+[1.205s] writing list of installed files to '/home/student/ros2_ws/build/eced3901/install.log'
+[1.237s] Invoked command in '/home/student/ros2_ws/src/eced3901' returned '0': PYTHONPATH=/home/student/ros2_ws/build/eced3901/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/install/eced3901/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../../build/eced3901 build --build-base /home/student/ros2_ws/build/eced3901/build install --record /home/student/ros2_ws/build/eced3901/install.log --single-version-externally-managed install_data

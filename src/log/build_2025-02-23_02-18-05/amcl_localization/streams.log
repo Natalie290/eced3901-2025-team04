@@ -1,0 +1,20 @@
+[0.625s] Invoking command in '/home/student/ros2_ws/src/amcl_localization': PYTHONPATH=/home/student/ros2_ws/src/build/amcl_localization/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/amcl_localization build --build-base /home/student/ros2_ws/src/build/amcl_localization/build install --record /home/student/ros2_ws/src/build/amcl_localization/install.log --single-version-externally-managed
+[0.886s] running egg_info
+[0.886s] writing ../build/amcl_localization/amcl_localization.egg-info/PKG-INFO
+[0.888s] writing dependency_links to ../build/amcl_localization/amcl_localization.egg-info/dependency_links.txt
+[0.888s] writing entry points to ../build/amcl_localization/amcl_localization.egg-info/entry_points.txt
+[0.889s] writing requirements to ../build/amcl_localization/amcl_localization.egg-info/requires.txt
+[0.890s] writing top-level names to ../build/amcl_localization/amcl_localization.egg-info/top_level.txt
+[0.892s] reading manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'
+[0.894s] writing manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'
+[0.894s] running build
+[0.894s] running build_py
+[0.895s] running install
+[0.895s] running install_lib
+[0.896s] running install_egg_info
+[0.899s] removing '/home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization-0.0.1-py3.10.egg-info' (and everything under it)
+[0.900s] Copying ../build/amcl_localization/amcl_localization.egg-info to /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization-0.0.1-py3.10.egg-info
+[0.901s] running install_scripts
+[0.930s] Installing amcl_node script to /home/student/ros2_ws/src/install/amcl_localization/bin
+[0.931s] writing list of installed files to '/home/student/ros2_ws/src/build/amcl_localization/install.log'
+[0.968s] Invoked command in '/home/student/ros2_ws/src/amcl_localization' returned '0': PYTHONPATH=/home/student/ros2_ws/src/build/amcl_localization/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/amcl_localization build --build-base /home/student/ros2_ws/src/build/amcl_localization/build install --record /home/student/ros2_ws/src/build/amcl_localization/install.log --single-version-externally-managed

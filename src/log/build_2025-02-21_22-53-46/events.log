@@ -1,0 +1,141 @@
+[0.000000] (-) TimerEvent: {}
+[0.000184] (amcl_localization) JobQueued: {'identifier': 'amcl_localization', 'dependencies': OrderedDict()}
+[0.000207] (eced3901) JobQueued: {'identifier': 'eced3901', 'dependencies': OrderedDict()}
+[0.000221] (amcl_localization) JobStarted: {'identifier': 'amcl_localization'}
+[0.018029] (eced3901) JobStarted: {'identifier': 'eced3901'}
+[0.099298] (-) TimerEvent: {}
+[0.205709] (-) TimerEvent: {}
+[0.312654] (-) TimerEvent: {}
+[0.413364] (-) TimerEvent: {}
+[0.514295] (-) TimerEvent: {}
+[0.681309] (-) TimerEvent: {}
+[0.682793] (amcl_localization) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', '../build/amcl_localization', 'build', '--build-base', '/home/student/ros2_ws/src/build/amcl_localization/build', 'install', '--record', '/home/student/ros2_ws/src/build/amcl_localization/install.log', '--single-version-externally-managed'], 'cwd': '/home/student/ros2_ws/src/amcl_localization', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'LANGUAGE': 'en_CA:en', 'USER': 'student', 'XDG_SESSION_TYPE': 'wayland', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib', 'HOME': '/home/student', 'OLDPWD': '/home/student', 'DESKTOP_SESSION': 'ubuntu', 'ROS_PYTHON_VERSION': '3', 'GNOME_SHELL_SESSION_MODE': 'ubuntu', 'GTK_MODULES': 'gail:atk-bridge', 'SYSTEMD_EXEC_PID': '1367', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', 'IM_CONFIG_PHASE': '1', 'WAYLAND_DISPLAY': 'wayland-0', 'COLCON_PREFIX_PATH': '/home/student/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'student', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'USERNAME': 'student', 'TERM': 'xterm-256color', 'GAZEBO_MODEL_PATH': ':/home/student/ros2_ws/src/eced3901/models', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/student/ros2_ws/install/amcl_localization/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin', 'SESSION_MANAGER': 'local/student-VirtualBox:@/tmp/.ICE-unix/1047,unix/student-VirtualBox:/tmp/.ICE-unix/1047', 'XDG_MENU_PREFIX': 'gnome-', 'GNOME_TERMINAL_SCREEN': '/org/gnome/Terminal/screen/43b824e9_ca73_4cc3_b207_0fa7c64e142b', 'GNOME_SETUP_DISPLAY': ':1', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': ':0', 'LANG': 'en_CA.UTF-8', 'XDG_CURRENT_DESKTOP': 'ubuntu:GNOME', 'XMODIFIERS': '@im=ibus', 'XDG_SESSION_DESKTOP': 'ubuntu', 'XAUTHORITY': '/run/user/1000/.mutter-Xwaylandauth.29AJ22', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'GNOME_TERMINAL_SERVICE': ':1.118', 'SSH_AGENT_LAUNCHER': 'gnome-keyring', 'SSH_AUTH_SOCK': '/run/user/1000/keyring/ssh', 'ROS_DOMAIN_ID': '30', 'AMENT_PREFIX_PATH': '/home/student/ros2_ws/install/eced3901:/opt/ros/humble', 'SHELL': '/bin/bash', 'QT_ACCESSIBILITY': '1', 'GDMSESSION': 'ubuntu', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'QT_IM_MODULE': 'ibus', 'PWD': '/home/student/ros2_ws/src/build/amcl_localization', 'XDG_CONFIG_DIRS': '/etc/xdg/xdg-ubuntu:/etc/xdg', 'XDG_DATA_DIRS': '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/student/ros2_ws/src/build/amcl_localization/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages:/home/student/ros2_ws/install/eced3901/lib/python3.10/site-packages:/home/student/ros2_ws/install/amcl_localization/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1', 'VTE_VERSION': '6800'}, 'shell': False}
+[0.799344] (-) TimerEvent: {}
+[0.828794] (eced3901) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', '-W', 'ignore:easy_install command is deprecated', 'setup.py', 'egg_info', '--egg-base', '../build/eced3901', 'build', '--build-base', '/home/student/ros2_ws/src/build/eced3901/build', 'install', '--record', '/home/student/ros2_ws/src/build/eced3901/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/student/ros2_ws/src/eced3901', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'LANGUAGE': 'en_CA:en', 'USER': 'student', 'XDG_SESSION_TYPE': 'wayland', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib', 'HOME': '/home/student', 'OLDPWD': '/home/student', 'DESKTOP_SESSION': 'ubuntu', 'ROS_PYTHON_VERSION': '3', 'GNOME_SHELL_SESSION_MODE': 'ubuntu', 'GTK_MODULES': 'gail:atk-bridge', 'SYSTEMD_EXEC_PID': '1367', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', 'IM_CONFIG_PHASE': '1', 'WAYLAND_DISPLAY': 'wayland-0', 'COLCON_PREFIX_PATH': '/home/student/ros2_ws/install', 'ROS_DISTRO': 'humble', 'LOGNAME': 'student', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'XDG_SESSION_CLASS': 'user', 'USERNAME': 'student', 'TERM': 'xterm-256color', 'GAZEBO_MODEL_PATH': ':/home/student/ros2_ws/src/eced3901/models', 'GNOME_DESKTOP_SESSION_ID': 'this-is-deprecated', 'ROS_LOCALHOST_ONLY': '0', 'PATH': '/home/student/ros2_ws/install/amcl_localization/bin:/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin', 'SESSION_MANAGER': 'local/student-VirtualBox:@/tmp/.ICE-unix/1047,unix/student-VirtualBox:/tmp/.ICE-unix/1047', 'XDG_MENU_PREFIX': 'gnome-', 'GNOME_TERMINAL_SCREEN': '/org/gnome/Terminal/screen/43b824e9_ca73_4cc3_b207_0fa7c64e142b', 'GNOME_SETUP_DISPLAY': ':1', 'XDG_RUNTIME_DIR': '/run/user/1000', 'DISPLAY': ':0', 'LANG': 'en_CA.UTF-8', 'XDG_CURRENT_DESKTOP': 'ubuntu:GNOME', 'XMODIFIERS': '@im=ibus', 'XDG_SESSION_DESKTOP': 'ubuntu', 'XAUTHORITY': '/run/user/1000/.mutter-Xwaylandauth.29AJ22', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'GNOME_TERMINAL_SERVICE': ':1.118', 'SSH_AGENT_LAUNCHER': 'gnome-keyring', 'SSH_AUTH_SOCK': '/run/user/1000/keyring/ssh', 'ROS_DOMAIN_ID': '30', 'AMENT_PREFIX_PATH': '/home/student/ros2_ws/install/eced3901:/opt/ros/humble', 'SHELL': '/bin/bash', 'QT_ACCESSIBILITY': '1', 'GDMSESSION': 'ubuntu', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'QT_IM_MODULE': 'ibus', 'PWD': '/home/student/ros2_ws/src/build/eced3901', 'XDG_CONFIG_DIRS': '/etc/xdg/xdg-ubuntu:/etc/xdg', 'XDG_DATA_DIRS': '/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop', 'PYTHONPATH': '/home/student/ros2_ws/src/build/eced3901/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages:/home/student/ros2_ws/install/eced3901/lib/python3.10/site-packages:/home/student/ros2_ws/install/amcl_localization/lib/python3.10/site-packages:/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages', 'COLCON': '1', 'VTE_VERSION': '6800'}, 'shell': False}
+[0.905547] (-) TimerEvent: {}
+[0.908086] (amcl_localization) StdoutLine: {'line': b'running egg_info\n'}
+[0.908251] (amcl_localization) StdoutLine: {'line': b'creating ../build/amcl_localization/amcl_localization.egg-info\n'}
+[0.908706] (amcl_localization) StdoutLine: {'line': b'writing ../build/amcl_localization/amcl_localization.egg-info/PKG-INFO\n'}
+[0.908760] (amcl_localization) StdoutLine: {'line': b'writing dependency_links to ../build/amcl_localization/amcl_localization.egg-info/dependency_links.txt\n'}
+[0.908802] (amcl_localization) StdoutLine: {'line': b'writing entry points to ../build/amcl_localization/amcl_localization.egg-info/entry_points.txt\n'}
+[0.908843] (amcl_localization) StdoutLine: {'line': b'writing requirements to ../build/amcl_localization/amcl_localization.egg-info/requires.txt\n'}
+[0.908882] (amcl_localization) StdoutLine: {'line': b'writing top-level names to ../build/amcl_localization/amcl_localization.egg-info/top_level.txt\n'}
+[0.908921] (amcl_localization) StdoutLine: {'line': b"writing manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'\n"}
+[0.909426] (amcl_localization) StdoutLine: {'line': b"reading manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'\n"}
+[0.911014] (amcl_localization) StdoutLine: {'line': b"writing manifest file '../build/amcl_localization/amcl_localization.egg-info/SOURCES.txt'\n"}
+[0.911128] (amcl_localization) StdoutLine: {'line': b'running build\n'}
+[0.911179] (amcl_localization) StdoutLine: {'line': b'running build_py\n'}
+[0.911768] (amcl_localization) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/build/amcl_localization/build\n'}
+[0.911820] (amcl_localization) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/build/amcl_localization/build/lib\n'}
+[0.911865] (amcl_localization) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization\n'}
+[0.911908] (amcl_localization) StdoutLine: {'line': b'copying amcl_localization/__init__.py -> /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization\n'}
+[0.911961] (amcl_localization) StdoutLine: {'line': b'copying amcl_localization/amcl_node.py -> /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization\n'}
+[0.912175] (amcl_localization) StdoutLine: {'line': b'running install\n'}
+[0.912682] (amcl_localization) StdoutLine: {'line': b'running install_lib\n'}
+[0.913449] (amcl_localization) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization\n'}
+[0.913529] (amcl_localization) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization/__init__.py -> /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization\n'}
+[0.913583] (amcl_localization) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/amcl_localization/build/lib/amcl_localization/amcl_node.py -> /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization\n'}
+[0.914093] (amcl_localization) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization/__init__.py to __init__.cpython-310.pyc\n'}
+[0.914418] (amcl_localization) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization/amcl_node.py to amcl_node.cpython-310.pyc\n'}
+[0.915091] (amcl_localization) StdoutLine: {'line': b'running install_egg_info\n'}
+[0.917153] (amcl_localization) StdoutLine: {'line': b'Copying ../build/amcl_localization/amcl_localization.egg-info to /home/student/ros2_ws/src/install/amcl_localization/lib/python3.10/site-packages/amcl_localization-0.0.1-py3.10.egg-info\n'}
+[0.917915] (amcl_localization) StdoutLine: {'line': b'running install_scripts\n'}
+[0.938857] (amcl_localization) StdoutLine: {'line': b'Installing amcl_node script to /home/student/ros2_ws/src/install/amcl_localization/bin\n'}
+[0.941937] (amcl_localization) StdoutLine: {'line': b"writing list of installed files to '/home/student/ros2_ws/src/build/amcl_localization/install.log'\n"}
+[0.985652] (amcl_localization) CommandEnded: {'returncode': 0}
+[1.006942] (-) TimerEvent: {}
+[1.017070] (amcl_localization) JobEnded: {'identifier': 'amcl_localization', 'rc': 0}
+[1.107789] (eced3901) StdoutLine: {'line': b'running egg_info\n'}
+[1.108032] (-) TimerEvent: {}
+[1.108501] (eced3901) StdoutLine: {'line': b'creating ../build/eced3901/eced3901.egg-info\n'}
+[1.110985] (eced3901) StdoutLine: {'line': b'writing ../build/eced3901/eced3901.egg-info/PKG-INFO\n'}
+[1.111831] (eced3901) StdoutLine: {'line': b'writing dependency_links to ../build/eced3901/eced3901.egg-info/dependency_links.txt\n'}
+[1.112334] (eced3901) StdoutLine: {'line': b'writing entry points to ../build/eced3901/eced3901.egg-info/entry_points.txt\n'}
+[1.112428] (eced3901) StdoutLine: {'line': b'writing requirements to ../build/eced3901/eced3901.egg-info/requires.txt\n'}
+[1.112474] (eced3901) StdoutLine: {'line': b'writing top-level names to ../build/eced3901/eced3901.egg-info/top_level.txt\n'}
+[1.112520] (eced3901) StdoutLine: {'line': b"writing manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'\n"}
+[1.124314] (eced3901) StdoutLine: {'line': b"reading manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'\n"}
+[1.124546] (eced3901) StdoutLine: {'line': b"writing manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'\n"}
+[1.124872] (eced3901) StdoutLine: {'line': b'running build\n'}
+[1.125970] (eced3901) StdoutLine: {'line': b'running build_py\n'}
+[1.126240] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/build/eced3901/build\n'}
+[1.126370] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/build/eced3901/build/lib\n'}
+[1.126453] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.126532] (eced3901) StdoutLine: {'line': b'copying eced3901/eced3901_dt1 copy.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.127294] (eced3901) StdoutLine: {'line': b'copying eced3901/__init__.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.128180] (eced3901) StdoutLine: {'line': b'copying eced3901/subscriber_member_function.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.129138] (eced3901) StdoutLine: {'line': b'copying eced3901/publisher_member_function.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.129884] (eced3901) StdoutLine: {'line': b'copying eced3901/eced3901_serialcode.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.130881] (eced3901) StdoutLine: {'line': b'copying eced3901/eced3901_dt1.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.131084] (eced3901) StdoutLine: {'line': b'copying eced3901/OdomLidar.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901\n'}
+[1.132227] (eced3901) StdoutLine: {'line': b'running install\n'}
+[1.132733] (eced3901) StdoutLine: {'line': b'running install_lib\n'}
+[1.134071] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.134162] (eced3901) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_dt1 copy.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.134444] (eced3901) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/__init__.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.134521] (eced3901) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/subscriber_member_function.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.135069] (eced3901) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/publisher_member_function.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.135152] (eced3901) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_serialcode.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.135457] (eced3901) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_dt1.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.135537] (eced3901) StdoutLine: {'line': b'copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/OdomLidar.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901\n'}
+[1.136627] (eced3901) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_dt1 copy.py to eced3901_dt1 copy.cpython-310.pyc\n'}
+[1.139127] (eced3901) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/__init__.py to __init__.cpython-310.pyc\n'}
+[1.139213] (eced3901) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/subscriber_member_function.py to subscriber_member_function.cpython-310.pyc\n'}
+[1.139878] (eced3901) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/publisher_member_function.py to publisher_member_function.cpython-310.pyc\n'}
+[1.140209] (eced3901) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_serialcode.py to eced3901_serialcode.cpython-310.pyc\n'}
+[1.141093] (eced3901) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_dt1.py to eced3901_dt1.cpython-310.pyc\n'}
+[1.142915] (eced3901) StdoutLine: {'line': b'byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/OdomLidar.py to OdomLidar.cpython-310.pyc\n'}
+[1.144348] (eced3901) StdoutLine: {'line': b'running install_data\n'}
+[1.144428] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/ament_index\n'}
+[1.144915] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index\n'}
+[1.144997] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index/packages\n'}
+[1.145043] (eced3901) StdoutLine: {'line': b'copying resource/eced3901 -> /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index/packages\n'}
+[1.145088] (eced3901) StdoutLine: {'line': b'copying package.xml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901\n'}
+[1.145131] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.145687] (eced3901) StdoutLine: {'line': b'copying launch/lab5dt2.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.145954] (eced3901) StdoutLine: {'line': b'copying launch/lab4a.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.146687] (eced3901) StdoutLine: {'line': b'copying launch/lab3.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.147305] (eced3901) StdoutLine: {'line': b'copying launch/lab7nav.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.148034] (eced3901) StdoutLine: {'line': b'copying launch/lab6a.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.148852] (eced3901) StdoutLine: {'line': b'copying launch/lab5.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.150056] (eced3901) StdoutLine: {'line': b'copying launch/lab4b.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.150349] (eced3901) StdoutLine: {'line': b'copying launch/lab6nav.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.151814] (eced3901) StdoutLine: {'line': b'copying launch/lab1.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.152453] (eced3901) StdoutLine: {'line': b'copying launch/lab6b.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.153683] (eced3901) StdoutLine: {'line': b'copying launch/lab1_small.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch\n'}
+[1.154084] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps\n'}
+[1.154700] (eced3901) StdoutLine: {'line': b'copying maps/lab4_map.pgm -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps\n'}
+[1.154880] (eced3901) StdoutLine: {'line': b'copying maps/lab4_map.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps\n'}
+[1.155861] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models\n'}
+[1.156784] (eced3901) StdoutLine: {'line': b'copying models/eced3901bot.urdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models\n'}
+[1.157253] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description\n'}
+[1.157944] (eced3901) StdoutLine: {'line': b'copying models/eced3901bot_description/model.config -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description\n'}
+[1.158622] (eced3901) StdoutLine: {'line': b'copying models/eced3901bot_description/model.sdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description\n'}
+[1.159045] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4\n'}
+[1.159124] (eced3901) StdoutLine: {'line': b'copying models/eced3901_lab4/model.config -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4\n'}
+[1.159826] (eced3901) StdoutLine: {'line': b'copying models/eced3901_lab4/model.sdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4\n'}
+[1.161298] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz\n'}
+[1.162076] (eced3901) StdoutLine: {'line': b'copying rviz/nav2.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz\n'}
+[1.162578] (eced3901) StdoutLine: {'line': b'copying rviz/urdf_config.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz\n'}
+[1.163532] (eced3901) StdoutLine: {'line': b'copying rviz/nav2_config.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz\n'}
+[1.164931] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds\n'}
+[1.165028] (eced3901) StdoutLine: {'line': b'copying worlds/eced3901_lab6.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds\n'}
+[1.165329] (eced3901) StdoutLine: {'line': b'copying worlds/eced3901_lab1.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds\n'}
+[1.166580] (eced3901) StdoutLine: {'line': b'copying worlds/eced3901_lab4.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds\n'}
+[1.167287] (eced3901) StdoutLine: {'line': b'copying worlds/empty.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds\n'}
+[1.168021] (eced3901) StdoutLine: {'line': b'copying worlds/eced3901_lab1_small.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds\n'}
+[1.168492] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/config\n'}
+[1.168908] (eced3901) StdoutLine: {'line': b'copying config/ekf.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/config\n'}
+[1.169342] (eced3901) StdoutLine: {'line': b'creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/params\n'}
+[1.169407] (eced3901) StdoutLine: {'line': b'copying params/nav2_params.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/params\n'}
+[1.170318] (eced3901) StdoutLine: {'line': b'running install_egg_info\n'}
+[1.172296] (eced3901) StdoutLine: {'line': b'Copying ../build/eced3901/eced3901.egg-info to /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901-0.0.0-py3.10.egg-info\n'}
+[1.173345] (eced3901) StdoutLine: {'line': b'running install_scripts\n'}
+[1.191099] (eced3901) StdoutLine: {'line': b'Installing dt1 script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901\n'}
+[1.191255] (eced3901) StdoutLine: {'line': b'Installing serialsensor script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901\n'}
+[1.191305] (eced3901) StdoutLine: {'line': b'Installing talker script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901\n'}
+[1.191444] (eced3901) StdoutLine: {'line': b"writing list of installed files to '/home/student/ros2_ws/src/build/eced3901/install.log'\n"}
+[1.211067] (eced3901) CommandEnded: {'returncode': 0}
+[1.211527] (-) TimerEvent: {}
+[1.217604] (eced3901) JobEnded: {'identifier': 'eced3901', 'rc': 0}
+[1.218744] (-) EventReactorShutdown: {}

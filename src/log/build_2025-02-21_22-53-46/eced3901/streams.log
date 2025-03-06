@@ -1,0 +1,91 @@
+[0.828s] Invoking command in '/home/student/ros2_ws/src/eced3901': PYTHONPATH=/home/student/ros2_ws/src/build/eced3901/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/eced3901 build --build-base /home/student/ros2_ws/src/build/eced3901/build install --record /home/student/ros2_ws/src/build/eced3901/install.log --single-version-externally-managed install_data
+[1.090s] running egg_info
+[1.091s] creating ../build/eced3901/eced3901.egg-info
+[1.093s] writing ../build/eced3901/eced3901.egg-info/PKG-INFO
+[1.094s] writing dependency_links to ../build/eced3901/eced3901.egg-info/dependency_links.txt
+[1.094s] writing entry points to ../build/eced3901/eced3901.egg-info/entry_points.txt
+[1.094s] writing requirements to ../build/eced3901/eced3901.egg-info/requires.txt
+[1.094s] writing top-level names to ../build/eced3901/eced3901.egg-info/top_level.txt
+[1.095s] writing manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'
+[1.106s] reading manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'
+[1.107s] writing manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'
+[1.108s] running build
+[1.108s] running build_py
+[1.108s] creating /home/student/ros2_ws/src/build/eced3901/build
+[1.108s] creating /home/student/ros2_ws/src/build/eced3901/build/lib
+[1.108s] creating /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.109s] copying eced3901/eced3901_dt1 copy.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.110s] copying eced3901/__init__.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.110s] copying eced3901/subscriber_member_function.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.111s] copying eced3901/publisher_member_function.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.112s] copying eced3901/eced3901_serialcode.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.113s] copying eced3901/eced3901_dt1.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.113s] copying eced3901/OdomLidar.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+[1.114s] running install
+[1.115s] running install_lib
+[1.116s] creating /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.116s] copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_dt1 copy.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.116s] copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/__init__.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.117s] copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/subscriber_member_function.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.117s] copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/publisher_member_function.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.117s] copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_serialcode.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.117s] copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_dt1.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.118s] copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/OdomLidar.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+[1.119s] byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_dt1 copy.py to eced3901_dt1 copy.cpython-310.pyc
+[1.121s] byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/__init__.py to __init__.cpython-310.pyc
+[1.121s] byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/subscriber_member_function.py to subscriber_member_function.cpython-310.pyc
+[1.122s] byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/publisher_member_function.py to publisher_member_function.cpython-310.pyc
+[1.122s] byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_serialcode.py to eced3901_serialcode.cpython-310.pyc
+[1.123s] byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_dt1.py to eced3901_dt1.cpython-310.pyc
+[1.125s] byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/OdomLidar.py to OdomLidar.cpython-310.pyc
+[1.126s] running install_data
+[1.127s] creating /home/student/ros2_ws/src/install/eced3901/share/ament_index
+[1.127s] creating /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index
+[1.127s] creating /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index/packages
+[1.127s] copying resource/eced3901 -> /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index/packages
+[1.127s] copying package.xml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901
+[1.128s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.128s] copying launch/lab5dt2.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.128s] copying launch/lab4a.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.129s] copying launch/lab3.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.129s] copying launch/lab7nav.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.130s] copying launch/lab6a.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.131s] copying launch/lab5.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.132s] copying launch/lab4b.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.133s] copying launch/lab6nav.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.134s] copying launch/lab1.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.135s] copying launch/lab6b.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.136s] copying launch/lab1_small.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+[1.136s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps
+[1.137s] copying maps/lab4_map.pgm -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps
+[1.137s] copying maps/lab4_map.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps
+[1.138s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models
+[1.139s] copying models/eced3901bot.urdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models
+[1.140s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description
+[1.140s] copying models/eced3901bot_description/model.config -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description
+[1.141s] copying models/eced3901bot_description/model.sdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description
+[1.141s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4
+[1.142s] copying models/eced3901_lab4/model.config -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4
+[1.142s] copying models/eced3901_lab4/model.sdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4
+[1.144s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+[1.144s] copying rviz/nav2.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+[1.145s] copying rviz/urdf_config.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+[1.146s] copying rviz/nav2_config.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+[1.147s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+[1.147s] copying worlds/eced3901_lab6.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+[1.148s] copying worlds/eced3901_lab1.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+[1.149s] copying worlds/eced3901_lab4.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+[1.149s] copying worlds/empty.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+[1.150s] copying worlds/eced3901_lab1_small.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+[1.151s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/config
+[1.151s] copying config/ekf.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/config
+[1.151s] creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/params
+[1.152s] copying params/nav2_params.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/params
+[1.152s] running install_egg_info
+[1.154s] Copying ../build/eced3901/eced3901.egg-info to /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901-0.0.0-py3.10.egg-info
+[1.155s] running install_scripts
+[1.173s] Installing dt1 script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901
+[1.173s] Installing serialsensor script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901
+[1.173s] Installing talker script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901
+[1.173s] writing list of installed files to '/home/student/ros2_ws/src/build/eced3901/install.log'
+[1.193s] Invoked command in '/home/student/ros2_ws/src/eced3901' returned '0': PYTHONPATH=/home/student/ros2_ws/src/build/eced3901/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base ../build/eced3901 build --build-base /home/student/ros2_ws/src/build/eced3901/build install --record /home/student/ros2_ws/src/build/eced3901/install.log --single-version-externally-managed install_data

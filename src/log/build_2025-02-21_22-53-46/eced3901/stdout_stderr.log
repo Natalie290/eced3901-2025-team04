@@ -1,0 +1,89 @@
+running egg_info
+creating ../build/eced3901/eced3901.egg-info
+writing ../build/eced3901/eced3901.egg-info/PKG-INFO
+writing dependency_links to ../build/eced3901/eced3901.egg-info/dependency_links.txt
+writing entry points to ../build/eced3901/eced3901.egg-info/entry_points.txt
+writing requirements to ../build/eced3901/eced3901.egg-info/requires.txt
+writing top-level names to ../build/eced3901/eced3901.egg-info/top_level.txt
+writing manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'
+reading manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'
+writing manifest file '../build/eced3901/eced3901.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/student/ros2_ws/src/build/eced3901/build
+creating /home/student/ros2_ws/src/build/eced3901/build/lib
+creating /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+copying eced3901/eced3901_dt1 copy.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+copying eced3901/__init__.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+copying eced3901/subscriber_member_function.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+copying eced3901/publisher_member_function.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+copying eced3901/eced3901_serialcode.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+copying eced3901/eced3901_dt1.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+copying eced3901/OdomLidar.py -> /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901
+running install
+running install_lib
+creating /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_dt1 copy.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/__init__.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/subscriber_member_function.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/publisher_member_function.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_serialcode.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/eced3901_dt1.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+copying /home/student/ros2_ws/src/build/eced3901/build/lib/eced3901/OdomLidar.py -> /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901
+byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_dt1 copy.py to eced3901_dt1 copy.cpython-310.pyc
+byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/subscriber_member_function.py to subscriber_member_function.cpython-310.pyc
+byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/publisher_member_function.py to publisher_member_function.cpython-310.pyc
+byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_serialcode.py to eced3901_serialcode.cpython-310.pyc
+byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/eced3901_dt1.py to eced3901_dt1.cpython-310.pyc
+byte-compiling /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901/OdomLidar.py to OdomLidar.cpython-310.pyc
+running install_data
+creating /home/student/ros2_ws/src/install/eced3901/share/ament_index
+creating /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index
+creating /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index/packages
+copying resource/eced3901 -> /home/student/ros2_ws/src/install/eced3901/share/ament_index/resource_index/packages
+copying package.xml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab5dt2.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab4a.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab3.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab7nav.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab6a.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab5.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab4b.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab6nav.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab1.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab6b.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+copying launch/lab1_small.launch.py -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/launch
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps
+copying maps/lab4_map.pgm -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps
+copying maps/lab4_map.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/maps
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models
+copying models/eced3901bot.urdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description
+copying models/eced3901bot_description/model.config -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description
+copying models/eced3901bot_description/model.sdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901bot_description
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4
+copying models/eced3901_lab4/model.config -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4
+copying models/eced3901_lab4/model.sdf -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/models/eced3901_lab4
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+copying rviz/nav2.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+copying rviz/urdf_config.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+copying rviz/nav2_config.rviz -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/rviz
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+copying worlds/eced3901_lab6.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+copying worlds/eced3901_lab1.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+copying worlds/eced3901_lab4.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+copying worlds/empty.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+copying worlds/eced3901_lab1_small.world -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/worlds
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/config
+copying config/ekf.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/config
+creating /home/student/ros2_ws/src/install/eced3901/share/eced3901/params
+copying params/nav2_params.yaml -> /home/student/ros2_ws/src/install/eced3901/share/eced3901/params
+running install_egg_info
+Copying ../build/eced3901/eced3901.egg-info to /home/student/ros2_ws/src/install/eced3901/lib/python3.10/site-packages/eced3901-0.0.0-py3.10.egg-info
+running install_scripts
+Installing dt1 script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901
+Installing serialsensor script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901
+Installing talker script to /home/student/ros2_ws/src/install/eced3901/lib/eced3901
+writing list of installed files to '/home/student/ros2_ws/src/build/eced3901/install.log'
