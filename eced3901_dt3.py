@@ -13,6 +13,7 @@
 
 import rclpy
 import math
+import time
 from rclpy.node import Node
 
 from std_msgs.msg import String
@@ -157,15 +158,17 @@ class NavigateSquare(Node):
         self.turn_vel = 0.7  # Angular velocity (rad/s)
 
         # Define route lengths and turns
-        self.A = 1
-        self.B = 0.5
-        self.C = 1
+        self.A = 1.524
+        self.BE = 1.243
+        self.B = 0.76
+        self.C = 0.508
         self.D = 1
-        self.E = 1
-        self.F = 1
-        self.G = 1
-        self.H = 1
-        self.I = 1
+        self.E = 0.483
+        self.F = 0.7112
+        self.G = 0.457
+        self.H = 1.11
+        self.I = 0.332
+        self.J = 1.04
 
         self.turn90 = 90  # Turn 90 degrees after each side
         self.avoidance_angle = 10
@@ -188,8 +191,10 @@ class NavigateSquare(Node):
         # Obstacle detection
         self.laser_range = None
         self.avoiding_obstacle = False
-        self.use_advanced_wall = True
-        self.use_way_points = False
+        self.use_advanced_wall = False
+        self.use_way_points = True
+        self.use_RFID_Mag = False
+        self.use_Challange = False
 
         self.obstacle_distance_threshold = 0.125
 
@@ -226,7 +231,7 @@ class NavigateSquare(Node):
 
         if self.current_step == 0:  # Step 1: Move forward (A)
             if self.distance_travelled() < self.A:
-                msg.linear.x = 0.2
+                msg.linear.x = -0.2
             else:
                 self.prepare_turn(90)
                 self.current_step += 1
@@ -240,7 +245,7 @@ class NavigateSquare(Node):
 
         elif self.current_step == 2:  # Step 3: Move forward (B)
             if self.distance_travelled() < self.B:
-                msg.linear.x = 0.2
+                msg.linear.x = -0.2
             else:
                 self.prepare_turn(-180)
                 self.current_step += 1
@@ -254,7 +259,7 @@ class NavigateSquare(Node):
 
         elif self.current_step == 4:  # Step 5: Move forward (-B)
             if self.distance_travelled() < self.B:
-                msg.linear.x = 0.2
+                msg.linear.x = -0.2
             else:
                 self.prepare_turn(-90)
                 self.current_step += 1
@@ -268,9 +273,10 @@ class NavigateSquare(Node):
 
         elif self.current_step == 6:  # Step 7: Move forward (-A)
             if self.distance_travelled() < self.A:
-                msg.linear.x = 0.2
+                msg.linear.x = -0.2
             else:
                 msg.linear.x = 0.0  # Stop when the route is completed
+                self.stop_robot()
                 self.pub_vel.publish(msg)
                 self.get_logger().info("Route 1 Completed")
 
@@ -281,30 +287,116 @@ class NavigateSquare(Node):
 
         if self.current_step == 0:  # Step 1: Move forward (A)
             if self.distance_travelled() < self.A:
-                msg.linear.x = 0.2
+                msg.linear.x = -0.2
             else:
-                self.prepare_turn(90)
+                self.prepare_turn(80)
                 self.current_step += 1
+                self.get_logger().info("Route 0 Completed")
 
         elif self.current_step == 1:  # Step 2: Turn 90 degrees
             if self.turn_complete90():
                 self.current_step += 1
                 self.x_init, self.y_init = self.x_now, self.y_now
+                self.get_logger().info("Route 1 Completed")
             else:
                 msg.angular.z = self.turn_vel  # Rotate counterclockwise at speed
 
         elif self.current_step == 2:  # Step 3: Move forward (B)
-            if self.distance_travelled() < self.B:
-                msg.linear.x = 0.2
+            if self.distance_travelled() < self.BE:
+                msg.linear.x = -0.2
             else:
-                self.prepare_turn(-90)
+                self.pause_robot()
+                self.prepare_turn(80)
                 self.current_step += 1
+                self.get_logger().info("Route 2 Completed")
 
         elif self.current_step == 3:  # Step 2: Turn 90 degrees
             if self.turn_complete90():
                 self.current_step += 1
                 self.x_init, self.y_init = self.x_now, self.y_now
+                self.get_logger().info("Route 3 Completed")
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 4:  # Step 3: Move forward (B)
+            if self.distance_travelled() < self.F:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(-80)
+                self.current_step += 1
+                self.get_logger().info("Route 4 Completed")
+
+        elif self.current_step == 5:  # Step 3: Move forward (B)
+            if self.turn_complete_90():
+                self.stop_robot()
+                self.current_step += 1
+                self.prepare_turn(90)
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 6:  # Step 3: Move forward (B)
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 7:
+            if self.distance_travelled() < self.G:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(-90)
+                self.current_step += 1
+
+        elif self.current_step == 8:
+            if self.turn_complete90():
+                msg.linear.x = 0.0  # Stop when the route is completed
+                self.stop_robot()
+                self.pub_vel.publish(msg)
+                self.get_logger().info("Route 1 Completed")
+            
+        self.pub_vel.publish(msg)
     
+
+    def navigate_RFID_Mag(self):
+        self.get_logger().info("Executing navigate_RFID_Mag")
+        msg = Twist()
+
+        if self.current_step == 0:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                #self.stop_robot()
+                self.get_logger().info("Route 1 Completed")
+        self.pub_vel.publish(msg)
+    
+    def navigate_Challange(self):
+        msg = Twist()
+
+        if self.current_step == 0:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+    
+    def pause_robot(self, duration=5.0):
+        """Pause the robot in its position for the given duration (seconds)."""
+        self.get_logger().info(f"Pausing robot for {duration} seconds")
+
+        # Stop the robot
+        msg = Twist()
+        msg.linear.x = 0.0
+        msg.angular.z = 0.0
+        self.pub_vel.publish(msg)
+
+        # Wait for the specified duration without blocking ROS2
+        start_time = self.get_clock().now().seconds_nanoseconds()[0]
+        while self.get_clock().now().seconds_nanoseconds()[0] - start_time < duration:
+            rclpy.spin_once(self, timeout_sec=0.1)  # Keep spinning to handle callbacks
+
+        self.get_logger().info("Resuming movement")
 
     def prepare_turn(self, angle):
         """Prepare for turn"""
@@ -324,7 +416,7 @@ class NavigateSquare(Node):
 
         self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
 
-        if abs(angle_diff) < 5:  # Allow a tolerance of 5 degrees for turn completion
+        if abs(angle_diff) < 2:  # Allow a tolerance of 5 degrees for turn completion
             self.turning = False
             return True
         return False
@@ -340,7 +432,24 @@ class NavigateSquare(Node):
 
         self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
 
-        if abs(angle_diff) < 5:  # Tolerance for 180 degree turn
+        if abs(angle_diff) < 2:  # Tolerance for 180 degree turn
+            self.turning = False
+            return True
+        return False
+
+    def turn_complete_90(self):
+        """Check if -90 degree turn is complete"""
+        if self.yaw is None:
+            self.get_logger().error("Yaw value is None, cannot complete turn.")
+            return False  # Prevent further execution if yaw is None
+
+        #    Subtract 90 degrees for a -90 turn
+        target_yaw = (self.prev_yaw + self.turn_angle) % 360
+        angle_diff = (target_yaw - self.yaw + 70) % 360 - 180
+
+        self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
+
+        if abs(angle_diff) < 2:  # Allow a tolerance of 2 degrees for turn completion
             self.turning = False
             return True
         return False
@@ -378,7 +487,10 @@ class NavigateSquare(Node):
             self.navigate_advanced_wall()
         elif self.use_way_points:
             self.navigate_way_points()
-
+        elif self.use_RFID_Mag:
+            self.navigate_RFID_Mag()
+        elif self.use_Challange:
+            self.navigate_Challange()
 
 def main(args=None):
     rclpy.init(args=args)
