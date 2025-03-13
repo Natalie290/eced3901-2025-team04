@@ -328,9 +328,9 @@ class NavigateSquare(Node):
 
         elif self.current_step == 5:  # Step 3: Move forward (B)
             if self.turn_complete_90():
-                self.stop_robot()
                 self.current_step += 1
                 self.prepare_turn(90)
+                self.get_logger().info("Route 3 Completed")
                 self.x_init, self.y_init = self.x_now, self.y_now
             else:
                 msg.angular.z = self.turn_vel
