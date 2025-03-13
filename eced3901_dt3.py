@@ -12,6 +12,7 @@
 # limitations under the License.
 
 import rclpy
+import subprocess
 import math
 import time
 from rclpy.node import Node
@@ -191,8 +192,8 @@ class NavigateSquare(Node):
         # Obstacle detection
         self.laser_range = None
         self.avoiding_obstacle = False
-        self.use_advanced_wall = False
-        self.use_way_points = True
+        self.use_advanced_wall = True
+        self.use_way_points = False
         self.use_RFID_Mag = False
         self.use_Challange = False
 
@@ -228,7 +229,7 @@ class NavigateSquare(Node):
 
     def navigate_advanced_wall(self):
         msg = Twist()
-
+        subprocess.run(["python3", "/home/student/ros2_ws/src/eced3901/eced3901/servo.py"])
         if self.current_step == 0:  # Step 1: Move forward (A)
             if self.distance_travelled() < self.A:
                 msg.linear.x = -0.2
@@ -305,7 +306,7 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.BE:
                 msg.linear.x = -0.2
             else:
-                time.sleep(5)
+                self.pause_robot()
                 self.prepare_turn(80)
                 self.current_step += 1
                 self.get_logger().info("Route 2 Completed")
@@ -328,38 +329,34 @@ class NavigateSquare(Node):
 
         elif self.current_step == 5:  # Step 3: Move forward (B)
             if self.turn_complete_90():
-                self.stop_robot()
-                self.pause_robot(0.2)
+                self.current_step += 1
                 self.prepare_turn(90)
-                self.get_logger().info("Route 5 Completed")
+                self.get_logger().info("Route 3 Completed")
+                self.x_init, self.y_init = self.x_now, self.y_now
             else:
                 msg.angular.z = self.turn_vel
 
         elif self.current_step == 6:  # Step 3: Move forward (B)
             if self.turn_complete90():
                 self.current_step += 1
-                self.get_logger().info("Route 6 Completed")
                 self.x_init, self.y_init = self.x_now, self.y_now
             else: 
                 msg.angular.z = self.turn_vel
 
         elif self.current_step == 7:
             if self.distance_travelled() < self.G:
-                msg.linear.x = 0.2
+                msg.linear.x = -0.2
             else:
-                self.prepare_turn(90)
+                self.prepare_turn(-90)
                 self.current_step += 1
-                self.get_logger().info("Route 7 Completed")
 
         elif self.current_step == 8:
             if self.turn_complete90():
-                self.pub_vel.publish(msg)
-                self.get_logger().info("Route 8 Completed")
+                msg.linear.x = 0.0  # Stop when the route is completed
                 self.stop_robot()
-                msg.linear.x = 0
-            else: 
-                msg.angular.z = self.turn_vel
-
+                self.pub_vel.publish(msg)
+                self.get_logger().info("Route 1 Completed")
+            
         self.pub_vel.publish(msg)
     
 
@@ -386,24 +383,21 @@ class NavigateSquare(Node):
                 self.current_step += 1
     
     def pause_robot(self, duration=5.0):
-        """Pause the robot for the given duration and then continue to the next step."""
+        """Pause the robot in its position for the given duration (seconds)."""
         self.get_logger().info(f"Pausing robot for {duration} seconds")
-        
+
         # Stop the robot
         msg = Twist()
         msg.linear.x = 0.0
         msg.angular.z = 0.0
         self.pub_vel.publish(msg)
-        
-        # Set a timer to resume movement after the delay
-        self.timer = self.create_timer(duration, self.resume_movement)
 
-    def resume_movement(self):
-        """Resume the movement after the pause."""
+        # Wait for the specified duration without blocking ROS2
+        start_time = self.get_clock().now().seconds_nanoseconds()[0]
+        while self.get_clock().now().seconds_nanoseconds()[0] - start_time < duration:
+            rclpy.spin_once(self, timeout_sec=0.1)  # Keep spinning to handle callbacks
+
         self.get_logger().info("Resuming movement")
-        self.destroy_timer(self.timer)  # Remove the timer so it doesn't trigger again
-        self.current_step += 1  # Move to the next step
-
 
     def prepare_turn(self, angle):
         """Prepare for turn"""
@@ -451,8 +445,8 @@ class NavigateSquare(Node):
             return False  # Prevent further execution if yaw is None
 
         #    Subtract 90 degrees for a -90 turn
-        target_yaw = (self.prev_yaw - self.turn_angle) % 360
-        angle_diff = (target_yaw - self.yaw + 180) % 360 - 180
+        target_yaw = (self.prev_yaw + self.turn_angle) % 360
+        angle_diff = (target_yaw - self.yaw + 70) % 360 - 180
 
         self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
 
