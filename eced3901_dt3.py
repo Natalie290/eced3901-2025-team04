@@ -192,8 +192,8 @@ class NavigateSquare(Node):
         # Obstacle detection
         self.laser_range = None
         self.avoiding_obstacle = False
-        self.use_advanced_wall = True
-        self.use_way_points = False
+        self.use_advanced_wall = False
+        self.use_way_points = True
         self.use_RFID_Mag = False
         self.use_Challange = False
 
@@ -229,7 +229,7 @@ class NavigateSquare(Node):
 
     def navigate_advanced_wall(self):
         msg = Twist()
-        subprocess.run(["python3", "/home/student/ros2_ws/src/eced3901/eced3901/servo.py"])
+        #subprocess.run(["python3", "/home/student/ros2_ws/src/eced3901/eced3901/servo.py"])
         if self.current_step == 0:  # Step 1: Move forward (A)
             if self.distance_travelled() < self.A:
                 msg.linear.x = -0.2
@@ -306,7 +306,7 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.BE:
                 msg.linear.x = -0.2
             else:
-                self.pause_robot()
+                #self.pause_robot()
                 self.prepare_turn(80)
                 self.current_step += 1
                 self.get_logger().info("Route 2 Completed")
@@ -323,21 +323,21 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.F:
                 msg.linear.x = -0.2
             else:
-                self.prepare_turn(-80)
+                self.prepare_negturn(180)
                 self.current_step += 1
                 self.get_logger().info("Route 4 Completed")
 
         elif self.current_step == 5:  # Step 3: Move forward (B)
-            if self.turn_complete_90():
+            if self.turn_complete180():
                 self.current_step += 1
-                self.prepare_turn(90)
+                self.prepare_turn(170)
                 self.get_logger().info("Route 3 Completed")
                 self.x_init, self.y_init = self.x_now, self.y_now
             else:
                 msg.angular.z = self.turn_vel
 
         elif self.current_step == 6:  # Step 3: Move forward (B)
-            if self.turn_complete90():
+            if self.turn_complete180():
                 self.current_step += 1
                 self.x_init, self.y_init = self.x_now, self.y_now
             else: 
@@ -347,15 +347,21 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.G:
                 msg.linear.x = -0.2
             else:
-                self.prepare_turn(-90)
+                self.prepare_negturn(70)
                 self.current_step += 1
 
         elif self.current_step == 8:
             if self.turn_complete90():
-                msg.linear.x = 0.0  # Stop when the route is completed
-                self.stop_robot()
                 self.pub_vel.publish(msg)
+                self.current_step +=  1
                 self.get_logger().info("Route 1 Completed")
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 9:
+            msg.linear.x = 0.0
+            self.stop_robot()
             
         self.pub_vel.publish(msg)
     
@@ -405,6 +411,13 @@ class NavigateSquare(Node):
         self.prev_yaw = self.yaw
         self.turn_angle = angle
         self.get_logger().info(f"Preparing to turn {angle} degrees")
+
+    def prepare_negturn(self, angle):
+        """Prepare for turn"""
+        self.turning = True
+        self.prev_yaw = self.yaw
+        self.turn_angle = -angle
+        self.get_logger().info(f"Preparing to turn {-angle} degrees")
 
     def turn_complete90(self):
         """Check if 90 degree turn is complete"""
