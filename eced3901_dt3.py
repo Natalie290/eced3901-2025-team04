@@ -192,8 +192,8 @@ class NavigateSquare(Node):
         # Obstacle detection
         self.laser_range = None
         self.avoiding_obstacle = False
-        self.use_advanced_wall = False
-        self.use_way_points = True
+        self.use_advanced_wall = True
+        self.use_way_points = False
         self.use_RFID_Mag = False
         self.use_Challange = False
 
@@ -290,7 +290,7 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.A:
                 msg.linear.x = -0.2
             else:
-                self.prepare_turn(80)
+                self.prepare_turn(85)
                 self.current_step += 1
                 self.get_logger().info("Route 0 Completed")
 
@@ -347,7 +347,7 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.G:
                 msg.linear.x = -0.2
             else:
-                self.prepare_negturn(70)
+                self.prepare_negturn(60)
                 self.current_step += 1
 
         elif self.current_step == 8:
@@ -382,11 +382,68 @@ class NavigateSquare(Node):
         msg = Twist()
 
         if self.current_step == 0:
+            if self.distance_travelled() < self.H:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(80)
+                self.current_step += 1
+
+        elif self.current_step == 1:
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 2:
             if self.distance_travelled() < self.I:
                 msg.linear.x = -0.2
             else:
-                self.prepare_turn(90)
+                self.prepare_negturn(90)
                 self.current_step += 1
+
+        elif self.current_step == 3:
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = self.turn_vel
+        
+        elif self.current_step == 4:
+            if self.distance_travelled() < (self.A-self.H):
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 5:
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 6:
+            if self.distance_travelled() < self.B:
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 7:
+            if self.distance_travelled() < self.G:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_negturn(60)
+                self.current_step += 1
+
+        elif self.current_step == 8:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_negturn(90)
+                self.current_step += 1 
+        
     
     def pause_robot(self, duration=5.0):
         """Pause the robot in its position for the given duration (seconds)."""
