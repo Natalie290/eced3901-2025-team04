@@ -15,6 +15,7 @@ import rclpy
 import subprocess
 import math
 import time
+import threading
 from rclpy.node import Node
 
 from std_msgs.msg import String
@@ -165,12 +166,14 @@ class NavigateSquare(Node):
         self.C = 0.508
         self.D = 1
         self.E = 0.483
-        self.F = 0.7112
-        self.G = 0.33
+        self.F = 0.6
+        self.G = 0.31
         self.H = 1.11
         self.I = 0.25
-
-        self.J = 1.04
+        self.J = 1
+        self.L = 0.4
+        self.M = 0.27
+        self.N = 0.26
 
         self.turn90 = 90  # Turn 90 degrees after each side
         self.avoidance_angle = 10
@@ -193,10 +196,11 @@ class NavigateSquare(Node):
         # Obstacle detection
         self.laser_range = None
         self.avoiding_obstacle = False
-        self.use_advanced_wall = False
-        self.use_way_points = True
+        self.use_advanced_wall =True
+        self.use_way_points = False
         self.use_RFID_Mag = False
         self.use_Challange = False
+        self.use_Tokens = False
 
         self.obstacle_distance_threshold = 0.125
 
@@ -240,14 +244,15 @@ class NavigateSquare(Node):
         elif self.current_step == 1:  # Step 2: Turn 90 degrees
             if self.turn_complete90():
                 self.current_step += 1
+                self.run_servo()
                 self.x_init, self.y_init = self.x_now, self.y_now
             else:
-                msg.angular.z = self.turn_vel  # Rotate counterclockwise at speed
+                msg.angular.z = 0.7  # Rotate counterclockwise at speed
 
         elif self.current_step == 2:  # Step 3: Move forward (B)
             if self.distance_travelled() < self.B:
                 msg.linear.x = -0.2
-                subprocess.run(["ampy", "--port",  "/dev/ttyACM0",  "run", "/home/student/ros2_ws/src/eced3901/eced3901/servo.py"])           
+                self.run_servo_thread()
             else:
                 self.prepare_turn(-180)
                 self.current_step += 1
@@ -324,21 +329,21 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.F:
                 msg.linear.x = -0.2
             else:
-                self.prepare_negturn(180)
+                self.prepare_turn(85)
                 self.current_step += 1
                 self.get_logger().info("Route 4 Completed")
 
         elif self.current_step == 5:  # Step 3: Move forward (B)
-            if self.turn_complete180():
+            if self.turn_complete270():
                 self.current_step += 1
-                self.prepare_turn(180)
+                self.prepare_turn(90)
                 self.get_logger().info("Route 3 Completed")
                 self.x_init, self.y_init = self.x_now, self.y_now
             else:
-                msg.angular.z = self.turn_vel
+                msg.angular.z = -0.7
 
         elif self.current_step == 6:  # Step 3: Move forward (B)
-            if self.turn_complete180():
+            if self.turn_complete90():
                 self.current_step += 1
                 self.x_init, self.y_init = self.x_now, self.y_now
             else: 
@@ -348,25 +353,20 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.G:
                 msg.linear.x = -0.2
             else:
-                self.prepare_turn(90)
+                self.prepare_turn(80)
                 self.current_step += 1
 
         elif self.current_step == 8:
-            if self.turn_complete90():
+            if self.turn_complete270():
                 self.pub_vel.publish(msg)
                 self.current_step +=  1
                 self.get_logger().info("Route 1 Completed")
                 self.x_init, self.y_init = self.x_now, self.y_now
             else:
-                msg.angular.z = self.turn_vel
+                msg.angular.z = -0.7
 
         elif self.current_step == 9:
-            if self.distance_travelled() < self.I:
-                msg.linear.x = -0.2
-                subprocess.run(["ampy", "--port",  "/dev/ttyACM0",  "run", "/home/student/ros2_ws/src/eced3901/eced3901/servo.py"]) 
-            else:
-                self.prepare_negturn(180)
-                self.current_step += 1
+            self.stop_robot()
             
         self.pub_vel.publish(msg)
     
@@ -383,15 +383,42 @@ class NavigateSquare(Node):
                 self.get_logger().info("Route 1 Completed")
 
         self.pub_vel.publish(msg)
+
+    def navigate_Tokens(self):
+        msg = Twist()
+
+        if self.current_step == 0:
+            if self.distance_travelled() < self.L:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 1:  # Step 3: Move forward (B)
+            if self.turn_complete270():
+                self.current_step += 1
+                self.prepare_turn(90)
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = -0.7
+
+        elif self.current_step == 2:
+            if self.distance_travelled() < self.M:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+        
+        self.pub_vel.publish(msg)
     
     def navigate_Challange(self):
         msg = Twist()
 
         if self.current_step == 0:
-            if self.distance_travelled() < self.H:
+            if self.distance_travelled() < self.J:
                 msg.linear.x = -0.2
             else:
-                self.prepare_turn(80)
+                self.prepare_turn(90)
                 self.current_step += 1
 
         elif self.current_step == 1:
@@ -405,22 +432,22 @@ class NavigateSquare(Node):
             if self.distance_travelled() < self.I:
                 msg.linear.x = -0.2
             else:
-                self.prepare_negturn(90)
+                self.prepare_turn(90)
                 self.current_step += 1
 
         elif self.current_step == 3:
-            if self.turn_complete90():
+            if self.turn_complete270():
                 self.current_step += 1
                 self.x_init, self.y_init = self.x_now, self.y_now
             else:
-                msg.angular.z = self.turn_vel
+                msg.angular.z = -0.7
         
         elif self.current_step == 4:
-            if self.distance_travelled() < (self.A-self.H):
-                self.current_step += 1
-                self.x_init, self.y_init = self.x_now, self.y_now
+            if self.distance_travelled() < 0.3:
+                msg.linear.x=-0.2
             else: 
-                msg.angular.z = self.turn_vel
+                self.prepare_turn(90)
+                self.current_step += 1
 
         elif self.current_step == 5:
             if self.turn_complete90():
@@ -431,26 +458,111 @@ class NavigateSquare(Node):
 
         elif self.current_step == 6:
             if self.distance_travelled() < self.B:
+                msg.linear.x = 0.2
+            else: 
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 7:
+            if self.turn_complete270():
                 self.current_step += 1
                 self.x_init, self.y_init = self.x_now, self.y_now
             else: 
-                msg.angular.z = self.turn_vel
-
-        elif self.current_step == 7:
-            if self.distance_travelled() < self.G:
-                msg.linear.x = -0.2
-            else:
-                self.prepare_negturn(60)
-                self.current_step += 1
+                msg.angular.z = -0.7
 
         elif self.current_step == 8:
             if self.distance_travelled() < self.I:
                 msg.linear.x = -0.2
             else:
-                self.prepare_negturn(90)
-                self.current_step += 1 
+                self.prepare_turn(180)
+                self.current_step += 1
+
+        elif self.current_step == 9:
+            if self.turn_complete180():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = 0.7
         
-    
+        elif self.current_step == 10:
+            if self.distance_travelled() < self.H:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 11:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = -0.7
+        
+        elif self.current_step == 12:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(180)
+                self.current_step += 1
+                self.run_servo()
+
+        elif self.current_step == 13:
+            if self.turn_complete180():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = 0.7
+
+        elif self.current_step == 14:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 15:
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = 0.7
+
+        elif self.current_step == 16:
+            if self.distance_travelled() < self.H:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 17:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = -0.7
+
+        elif self.current_step == 18:
+            if self.distance_travelled() < self.B:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+        
+        elif self.current_step == 19:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = -0.7
+
+        elif self.current_step == 20:
+            if self.distance_travelled() < self.A:
+                msg.linear.x = -0.2
+            else:
+                self.stop_robot()
+
+        self.pub_vel.publish(msg)
+        
     def pause_robot(self, duration=5.0):
         """Pause the robot in its position for the given duration (seconds)."""
         self.get_logger().info(f"Pausing robot for {duration} seconds")
@@ -513,17 +625,32 @@ class NavigateSquare(Node):
             self.turning = False
             return True
         return False
+
+    def turn_complete270(self):
+        """Check if 180 degree turn is complete"""
+        if self.yaw is None:
+            self.get_logger().error("Yaw value is None, cannot complete turn.")
+            return False
+
+        target_yaw = (self.prev_yaw + 270) % 360
+        angle_diff = (target_yaw - self.yaw + 180) % 360 - 180
+
+        self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
+
+        if abs(angle_diff) < 2:  # Tolerance for 180 degree turn
+            self.turning = False
+            return True
+        return False
     
     def run_servo(self):
-        try:
-            result = subprocess.run(
-                ["ampy", "--port", "/dev/ttyACM0", "run", "servo_script.py"], 
-                capture_output=True, text=True, check=True
-            )
-            self.get_logger().info(f"Servo response: {result.stdout}")
-        except subprocess.CalledProcessError as e:
-            self.get_logger().error(f"Servo error: {e.stderr}")
-    
+        subprocess.run(["ampy", "--port", "/dev/ttyACM0", "run", "/home/student/ros2_ws/src/eced3901/eced3901/servo.py"])
+
+        threading.Thread(target=run_servo).start()  
+
+    def run_servo_thread(self):
+        thread = threading.Thread(target=self.run_servo)
+        thread.daemon = True  # Ends thread when main program exits
+        thread.start()
 
     def turn_complete_90(self):
         """Check if -90 degree turn is complete"""
@@ -579,6 +706,8 @@ class NavigateSquare(Node):
             self.navigate_RFID_Mag()
         elif self.use_Challange:
             self.navigate_Challange()
+        elif self.use_Tokens:
+            self.navigate_Tokens()
 
 def main(args=None):
     rclpy.init(args=args)
