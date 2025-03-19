@@ -12,7 +12,10 @@
 # limitations under the License.
 
 import rclpy
+import subprocess
 import math
+import time
+import threading
 from rclpy.node import Node
 
 from std_msgs.msg import String
@@ -146,37 +149,40 @@ def noneIsInfinite(value):
 def min_ignore_None(data):
     return min(data, key=noneIsInfinite)
 
+# Rename variable to avoid conflict with method name
 class NavigateSquare(Node):
     """Simple class designed to navigate a square"""
 
     def __init__(self):
-        #This calls the initilization function of the base Node class
         super().__init__('navigate_square')
-
-        # We can either create variables here by declaring them
-        # as part of the 'self' class, or we could declare them
-        # earlier as part of the class itself. I find it easier
-        # to declare them here
-
-        # Ensure these are obviously floating point numbers and not
-        # integers (python is loosely typed)
-
-        # WARNING: Check for updates, note this is set and will run backwards
-        #          on the physical model but correctly in simulation.
-        self.state = "before box" # state for before robots infront of box
-        self.x_vel = 0.2 # x velocity
+        self.prev_yaw = 0.0
+        self.x_vel = 0.2
         self.turn_vel = 0.7  # Angular velocity (rad/s)
-        self.short_edge_length = 0.97  # Length of each side of the box (meters)
-        self.first_edge_length = 1.1 # length to travel along edge
-        self.side_length = self.first_edge_length
 
-        self.current_edge = 1  # Track which edge we're on (1-4 for each side of the box)
-        self.angle_to_turn = 90  # Turn 90 degrees after each side
-        self.distance_travelled = 0.0 #disatance traveled
-        self.turning = False # turn flag
+        # Define route lengths and turns
+        self.A = 1.48
+        self.BE = 1.1
+        self.B = 0.73
+        self.C = 0.508
+        self.D = 1
+        self.E = 0.483
+        self.F = 0.7112
+        self.G = 0.33
+        self.H = 1.11
+        self.I = 0.25
+        self.J = 1.04
+        self.L = 0.4
+        self.M = 0.27
+        self.N = 0.26
+
+        self.turn90 = 90  # Turn 90 degrees after each side
+        self.avoidance_angle = 10
+        self.distance_travelled_value = 0.0  # Renamed to avoid conflict
+        self.current_step = 0
+        self.turning = False
         self.angle_diff = 0.0
 
-        #robot position tracking
+        # Robot position tracking
         self.x_now = 0.0
         self.x_init = 0.0
         self.y_now = 0.0
@@ -187,22 +193,30 @@ class NavigateSquare(Node):
         self.pitch = None
         self.yaw = None
 
+        # Obstacle detection
         self.laser_range = None
+        self.avoiding_obstacle = False
+        self.use_advanced_wall =False
+        self.use_way_points = False
+        self.use_RFID_Mag = False
+        self.use_Challange = True
+
+        self.obstacle_distance_threshold = 0.125
 
         # Subscribe to odometry
         self.sub_odom = self.create_subscription(
-            Odometry, #Matches the import at the top (nav_msgs.msg import Odometry)
-            'odom', #odom topic
-            self.odom_callback, #Call this function
-            10) #Queue size 10
+            Odometry,
+            'odom',
+            self.odom_callback,
+            10)
 
         # Publish to velocity
         self.pub_vel = self.create_publisher(
-            Twist, #Expects the twist message format
+            Twist,
             'cmd_vel',
-            10) #Queue size 10
+            10)
 
-        # Subscribe to lidar - this requires a policy, otherwise you won't see any data
+        # Subscribe to lidar
         qos_policy = rclpy.qos.QoSProfile(reliability=rclpy.qos.ReliabilityPolicy.BEST_EFFORT,
                                           history=rclpy.qos.HistoryPolicy.KEEP_LAST,
                                           depth=1)
@@ -215,186 +229,462 @@ class NavigateSquare(Node):
         )
 
         self.ldi = LaserDataInterface(logger=self.get_logger())
-
         self.timer = self.create_timer(0.1, self.timer_callback)
 
-    def control_example_odom(self):
-        """Control example using odometry"""
+    def navigate_advanced_wall(self):
         msg = Twist()
-
-        # Calculate distance traveled
-        self.distance_travelled = math.sqrt((self.x_now - self.x_init)**2 + (self.y_now - self.y_init)**2)
-
-        if self.current_edge == 1:
-            self.side_length = self.first_edge_length
-        else:
-            self.side_length = self.short_edge_length
-
-        # Calculate distance traveled
-        self.distance_travelled = math.sqrt((self.x_now - self.x_init)**2 + (self.y_now - self.y_init)**2)
-
-        if self.current_edge == 1 and self.distance_travelled < self.first_edge_length:
-            self.get_logger().info(f"Moving forward first edge: {self.distance_travelled}/{self.first_edge_length}")
-            msg.linear.x = 0.2  # Move forward
-
-        # Turning logic, as before
-        elif self.turning:
-            target_yaw = (self.prev_yaw + 80) % 360
-            angle_diff = (target_yaw - self.yaw + 180) % 360 - 180
-
-            self.get_logger().info(f"Turning... Yaw: {self.yaw}, Target: {target_yaw}, Diff: {angle_diff}")
-
-            if abs(angle_diff) < 2:  # Small tolerance to consider turn complete
-                self.turning = False
-                self.side_length =self.side_length-0.08 # decrease distanve to travle to get closer to box
-                self.current_edge += 1 # increment side count
-                self.x_init = self.x_now  # Reset initial position for next edge
-                self.y_init = self.y_now
-                self.get_logger().info(f"Turn complete. Moving to edge {self.current_edge}")
+        if self.current_step == 0:  # Step 1: Move forward (A)
+            if self.distance_travelled() < self.A:
+                msg.linear.x = -0.2
             else:
-                msg.angular.z = 0.5 if angle_diff > 0 else -0.5 # continue turning
+                self.prepare_turn(90)
+                self.current_step += 1
 
-        elif self.current_edge > 1 and self.distance_travelled < self.side_length:
-            self.get_logger().info(f"Moving forward. Distance: {self.distance_travelled}/{self.side_length}")
-            msg.linear.x = 0.2  # Move forward at constant speed
+        elif self.current_step == 1:  # Step 2: Turn 90 degrees
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = 0.7  # Rotate counterclockwise at speed
 
-        else:
-            self.get_logger().info(f"Edge {self.current_edge} complete. Preparing to turn.")
-            self.turning = True
-            self.prev_yaw = self.yaw  # Store current yaw as reference for next turn
-            msg.linear.x = 0.0  # Stop movement before turning
+        elif self.current_step == 2:  # Step 3: Move forward (B)
+            if self.distance_travelled() < self.B:
+                msg.linear.x = -0.2
+                self.run_servo()
+            else:
+                self.prepare_turn(-180)
+                self.current_step += 1
 
-        if self.current_edge > 4: # loop 4 times for each side of box
-            self.get_logger().info("Square completed. Stopping.")
-            msg.linear.x = 0.0
-            msg.angular.z = 0.0
+        elif self.current_step == 3:  # Step 4: Turn -180 degrees
+            if self.turn_complete180():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = self.turn_vel  # Rotate counterclockwise at speed
+
+        elif self.current_step == 4:  # Step 5: Move forward (-B)
+            if self.distance_travelled() < self.B:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(-80)
+                self.current_step += 1
+
+        elif self.current_step == 5:  # Step 6: Turn -90 degrees
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = -self.turn_vel  # Rotate clockwise at speed
+
+        elif self.current_step == 6:  # Step 7: Move forward (-A)
+            if self.distance_travelled() < self.A:
+                msg.linear.x = -0.2
+            else:
+                msg.linear.x = 0.0  # Stop when the route is completed
+                self.stop_robot()
+                self.pub_vel.publish(msg)
+                self.get_logger().info("Route 1 Completed")
 
         self.pub_vel.publish(msg)
 
-    def control_example_lidar(self):
-        print("Hello")
-        """ Control example using LIDAR"""
+    def navigate_way_points(self):
         msg = Twist()
 
-        # Fetch LIDAR data: range in front of the robot
-        laser_ranges = self.ldi.get_range_array(0.0, left_offset_deg=-90, right_offset_deg=10)
-        if laser_ranges is None or len(laser_ranges) ==0:
-            self.get_logger().warning("Invalid range data, skipping control loop...")
-            return
-
-        # Minimum distance to obstacle in the forward direction
-        laser_ranges_min = min_ignore_None(laser_ranges)
-
-        # State machine logic for navigating around the box
-        if self.state == "before_box":
-            if laser_ranges_min and laser_ranges_min > 0.5:
-                # Continue moving forward
-                msg.linear.x = self.x_vel
-                msg.angular.z = 0.0
+        if self.current_step == 0:  # Step 1: Move forward (A)
+            if self.distance_travelled() < self.A:
+                msg.linear.x = -0.2
             else:
-                # Edge of box detected
-                self.state = "along_box"
+                self.prepare_turn(95)
+                self.current_step += 1
+                self.get_logger().info("Route 0 Completed")
 
-        elif self.state == "along_box":
-            if laser_ranges_min and laser_ranges_min > 0.3:
-                # Maintain close distance while moving along the box edge
-                msg.linear.x = self.x_vel
-                msg.angular.z = 0.1  # Slight adjustment to follow the edge
+        elif self.current_step == 1:  # Step 2: Turn 90 degrees
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+                self.get_logger().info("Route 1 Completed")
             else:
-                # Detected corner or obstacle, prepare to turn
-                self.state = "corner"
-                self.turn_start_time = self.get_clock().now()
+                msg.angular.z = self.turn_vel  # Rotate counterclockwise at speed
 
-        elif self.state == "corner":
-            if (self.get_clock().now() - self.turn_start_time).nanoseconds / 1e9 < self.turn_duration:
-                # Perform the 90° turn
-                msg.linear.x = 0.0
+        elif self.current_step == 2:  # Step 3: Move forward (B)
+            if self.distance_travelled() < self.BE:
+                msg.linear.x = -0.2
+            else:
+                #self.pause_robot()
+                self.prepare_turn(90)
+                self.current_step += 1
+                self.get_logger().info("Route 2 Completed")
+
+        elif self.current_step == 3:  # Step 2: Turn 90 degrees
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+                self.get_logger().info("Route 3 Completed")
+            else: 
                 msg.angular.z = self.turn_vel
+
+        elif self.current_step == 4:  # Step 3: Move forward (B)
+            if self.distance_travelled() < self.F:
+                msg.linear.x = -0.2
             else:
-                # Completed the turn
-                self.loops += 1
-                if self.loops >= 4:
-                    # Stop after completing the desired number of loops
-                    msg.linear.x = 0.0
-                    msg.angular.z = 0.0
-                    self.state = "stopped"
-                else:
-                    self.state = "before_box"
+                self.prepare_turn(90)
+                self.current_step += 1
+                self.get_logger().info("Route 4 Completed")
 
-        elif self.state == "stopped":
-            # Robot is stopped
-            msg.linear.x = 0.0
-            msg.angular.z = 0.0
+        elif self.current_step == 5:  # Step 3: Move forward (B)
+            if self.turn_complete270():
+                self.current_step += 1
+                self.prepare_turn(90)
+                self.get_logger().info("Route 3 Completed")
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = -0.7
 
-        # Publish the velocity command
+        elif self.current_step == 6:  # Step 3: Move forward (B)
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 7:
+            if self.distance_travelled() < self.G:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 8:
+            if self.turn_complete270():
+                self.pub_vel.publish(msg)
+                self.current_step +=  1
+                self.get_logger().info("Route 1 Completed")
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = -0.7
+
+        elif self.current_step == 9:
+            self.stop_robot()
+            
         self.pub_vel.publish(msg)
-        self.get_logger().info("Sent: " + str(msg))
+    
 
-    def timer_callback(self):
-        """Timer callback for 10Hz control loop"""
+    def navigate_RFID_Mag(self):
+        self.get_logger().info("Executing navigate_RFID_Mag")
+        msg = Twist()
 
-        #self.get_logger().info(f'Timer hit')
+        if self.current_step == 0:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.stop_robot()
+                self.get_logger().info("Route 1 Completed")
 
-        self.control_example_odom()
-        #self.control_example_lidar()  
+        self.pub_vel.publish(msg)
+    
+    def navigate_Challange(self):
+        msg = Twist()
+
+        if self.current_step == 0:
+            if self.distance_travelled() < self.J:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(80)
+                self.current_step += 1
+
+        elif self.current_step == 1:
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 2:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 3:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else:
+                msg.angular.z = -0.7
+        
+        elif self.current_step == 4:
+            if self.distance_travelled() < (self.A-self.J):
+                msg.linear.x=-0.2
+            else: 
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 5:
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = self.turn_vel
+
+        elif self.current_step == 6:
+            if self.distance_travelled() < self.B:
+                msg.linear.x = -0.2
+            else: 
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 7:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = -0.7
+
+        elif self.current_step == 8:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.current_step += 1
+
+        elif self.current_step == 9:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = 0.2
+            else:
+                self.prepare_turn(180)
+                self.current_step += 1
+
+        elif self.current_step == 10:
+            if self.turn_complete180():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = 0.7
+        
+        elif self.current_step == 11:
+            if self.distance_travelled() < self.H:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 12:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = -0.7
+        
+        elif self.current_step == 13:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(180)
+                self.current_step += 1
+                self.run_servo()
+
+        elif self.current_step == 14:
+            if self.turn_complete180():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = 0.7
+
+        elif self.current_step == 15:
+            if self.distance_travelled() < self.I:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 16:
+            if self.turn_complete90():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = 0.7
+
+        elif self.current_step == 17:
+            if self.distance_travelled() < self.H:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+
+        elif self.current_step == 18:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = -0.7
+
+        elif self.current_step == 19:
+            if self.distance_travelled() < self.B:
+                msg.linear.x = -0.2
+            else:
+                self.prepare_turn(90)
+                self.current_step += 1
+        
+        elif self.current_step == 20:
+            if self.turn_complete270():
+                self.current_step += 1
+                self.x_init, self.y_init = self.x_now, self.y_now
+            else: 
+                msg.angular.z = -0.7
+
+        elif self.current_step == 21:
+            if self.distance_travelled() < self.A:
+                msg.linear.x = -0.2
+            else:
+                self.stop_robot()
+
+        self.pub_vel.publish(msg)
+    
+    def pause_robot(self, duration=5.0):
+        """Pause the robot in its position for the given duration (seconds)."""
+        self.get_logger().info(f"Pausing robot for {duration} seconds")
+
+        # Stop the robot
+        msg = Twist()
+        msg.linear.x = 0.0
+        msg.angular.z = 0.0
+        self.pub_vel.publish(msg)
+
+        # Wait for the specified duration without blocking ROS2
+        start_time = self.get_clock().now().seconds_nanoseconds()[0]
+        while self.get_clock().now().seconds_nanoseconds()[0] - start_time < duration:
+            rclpy.spin_once(self, timeout_sec=0.1)  # Keep spinning to handle callbacks
+
+        self.get_logger().info("Resuming movement")
+
+    def prepare_turn(self, angle):
+        """Prepare for turn"""
+        self.turning = True
+        self.prev_yaw = self.yaw
+        self.turn_angle = angle
+        self.get_logger().info(f"Preparing to turn {angle} degrees")
+
+    def prepare_negturn(self, angle):
+        """Prepare for turn"""
+        self.turning = True
+        self.prev_yaw = self.yaw
+        self.turn_angle = -angle
+        self.get_logger().info(f"Preparing to turn {-angle} degrees")
+
+    def turn_complete90(self):
+        """Check if 90 degree turn is complete"""
+        if self.yaw is None:
+            self.get_logger().error("Yaw value is None, cannot complete turn.")
+            return False  # Prevent further execution if yaw is None
+
+        target_yaw = (self.prev_yaw + self.turn_angle) % 360
+        angle_diff = (target_yaw - self.yaw + 170) % 360 - 180
+
+        self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
+
+        if abs(angle_diff) < 2:  # Allow a tolerance of 5 degrees for turn completion
+            self.turning = False
+            return True
+        return False
+
+    def turn_complete180(self):
+        """Check if 180 degree turn is complete"""
+        if self.yaw is None:
+            self.get_logger().error("Yaw value is None, cannot complete turn.")
+            return False
+
+        target_yaw = (self.prev_yaw + self.turn_angle) % 360
+        angle_diff = (target_yaw - self.yaw + 180) % 360 - 180
+
+        self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
+
+        if abs(angle_diff) < 2:  # Tolerance for 180 degree turn
+            self.turning = False
+            return True
+        return False
+
+    def turn_complete270(self):
+        """Check if 180 degree turn is complete"""
+        if self.yaw is None:
+            self.get_logger().error("Yaw value is None, cannot complete turn.")
+            return False
+
+        target_yaw = (self.prev_yaw + 270) % 360
+        angle_diff = (target_yaw - self.yaw + 180) % 360 - 180
+
+        self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
+
+        if abs(angle_diff) < 2:  # Tolerance for 180 degree turn
+            self.turning = False
+            return True
+        return False
+    
+    def run_servo(self):
+        thread = threading.Thread(target=self.run_servo)
+        thread.daemon = True  # Ends thread when main program exits
+        thread.start()
+
+    def turn_complete_90(self):
+        """Check if -90 degree turn is complete"""
+        if self.yaw is None:
+            self.get_logger().error("Yaw value is None, cannot complete turn.")
+            return False  # Prevent further execution if yaw is None
+
+        #    Subtract 90 degrees for a -90 turn
+        target_yaw = (self.prev_yaw + self.turn_angle) % 360
+        angle_diff = (target_yaw - self.yaw + 70) % 360 - 180
+
+        self.get_logger().info(f"Yaw: {self.yaw}, Target Yaw: {target_yaw}, Angle Diff: {angle_diff}")
+
+        if abs(angle_diff) < 2:  # Allow a tolerance of 2 degrees for turn completion
+            self.turning = False
+            return True
+        return False
+
+    def stop_robot(self):
+        """Stop the robot"""
+        msg = Twist()
+        msg.linear.x = 0.0
+        msg.angular.z = 0.0
+        self.pub_vel.publish(msg)
+        self.get_logger().info("STOP command")
+
+    def distance_travelled(self):
+        """Calculate the distance traveled"""
+        return math.sqrt((self.x_now - self.x_init)**2 + (self.y_now - self.y_init)**2)
 
     def odom_callback(self, msg):
-        """Callback on 'odom' subscription"""
+        """Update odometry readings"""
         quaternion = msg.pose.pose.orientation
-        
-        # Convert the quaternion to Euler angles
-        rotation = R.from_quat([quaternion.x, quaternion.y, quaternion.z, quaternion.w])  # Create rotation object from quaternion
-        euler_angles = rotation.as_euler('xyz', degrees=True)  # Convert to Euler angles (roll, pitch, yaw)
-        
-        # Store Euler angles as self variables
-        self.roll = euler_angles[0]  # Roll (Euler angle)
-        self.pitch = euler_angles[1]  # Pitch (Euler angle)
-        self.yaw = euler_angles[2]  # Yaw (Euler angle)
-
-        if self.yaw < 0:
-            self.yaw += 360
-
-        self.get_logger().info(f"Roll: {self.roll}, Pitch: {self.pitch}, Yaw: {self.yaw}")
-        
-        #self.get_logger().info('Msg Data: "%s"' % msg)        
+        rotation = R.from_quat([quaternion.x, quaternion.y, quaternion.z, quaternion.w])
+        euler_angles = rotation.as_euler('xyz', degrees=True)
+        self.yaw = euler_angles[2] if euler_angles[2] >= 0 else euler_angles[2] + 360
         self.x_now = msg.pose.pose.position.x
         self.y_now = msg.pose.pose.position.y
 
+        self.get_logger().info(f"Updated Yaw: {self.yaw}")
 
     def range_callback(self, msg):
         """Callback on 'range' subscription"""
-        #self.get_logger().info('Scan Data: "%s"' % msg)
-        #self.get_logger().info('Scan Data: "%s"' % msg.angle_increment)
-
-        anglestep = msg.angle_increment
-        self.minrange = msg.range_min
-        maxrange = msg.range_max
-        ranges = msg.ranges[1:]
-
-        self.laser_range = max(ranges[0:5])
-       # self.get_logger().info('Scan Data: "%d"' % len(ranges))
-
         self.ldi.process_laser_msg(msg)
 
-    def destroy_node(self):
-        msg = Twist()
-        self.pub_vel.publish(msg)
-        super().destroy_node()
-        
+    def timer_callback(self):
+        """Main control loop"""
+        if self.use_advanced_wall:
+            self.navigate_advanced_wall()
+        elif self.use_way_points:
+            self.navigate_way_points()
+        elif self.use_RFID_Mag:
+            self.navigate_RFID_Mag()
+        elif self.use_Challange:
+            self.navigate_Challange()
 
 def main(args=None):
     rclpy.init(args=args)
-
     navigate_square = NavigateSquare()
-
     rclpy.spin(navigate_square)
-
-    # Destroy the node explicitly
-    # (optional - otherwise it will be done automatically
-    # when the garbage collector destroys the node object)
     navigate_square.destroy_node()
     rclpy.shutdown()
-
 
 if __name__ == '__main__':
     main()
